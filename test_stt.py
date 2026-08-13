@@ -1,6 +1,9 @@
-from voice.speech_to_text import listen
+from voice.speech_to_text import SpeechToText
 
+stt = SpeechToText()
 
-text = listen()
+stt.calibrate()
 
-print(f"Entrada: {text}")
+text = stt.listen()
+
+print(f"Has dicho: {text}")
