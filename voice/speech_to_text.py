@@ -1,6 +1,7 @@
-import speech_recognition as sr
+import speech_recognition   as sr
 from voice.providers.google import GoogleSTT
-from config import (
+from utils.logger           import logger
+from config                 import (
     STT_TIMEOUT,
     STT_PHRASE_TIME_LIMIT
 )
@@ -14,12 +15,12 @@ class SpeechToText:
 
     def calibrate(self):
         with self.microphone as source:
-            print("Calibrando micrófono...")
+            logger.info("Calibrando micrófono...")
             self.recognizer.adjust_for_ambient_noise(source)
 
     def listen(self):
         with self.microphone as source:
-            print("Escuchando...")
+            logger.info("Escuchando...")
 
             try:
                 return self.recognizer.listen(
@@ -28,7 +29,7 @@ class SpeechToText:
                     phrase_time_limit=STT_PHRASE_TIME_LIMIT
                 )
             except sr.WaitTimeoutError:
-                print("No detecté ninguna voz.")
+                logger.warning("No detecté ninguna voz.")
                 return None
 
     def transcribe(self, audio):
