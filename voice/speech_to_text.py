@@ -1,5 +1,9 @@
 import speech_recognition as sr
 from voice.providers.google import GoogleSTT
+from config import (
+    STT_TIMEOUT,
+    STT_PHRASE_TIME_LIMIT
+)
 
 class SpeechToText:
 
@@ -20,8 +24,8 @@ class SpeechToText:
             try:
                 return self.recognizer.listen(
                     source,
-                    timeout=5,
-                    phrase_time_limit=10
+                    timeout=STT_TIMEOUT,
+                    phrase_time_limit=STT_PHRASE_TIME_LIMIT
                 )
             except sr.WaitTimeoutError:
                 print("No detecté ninguna voz.")

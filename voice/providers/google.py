@@ -1,4 +1,7 @@
 import speech_recognition as sr
+from config import (
+    STT_LANGUAGE,
+)
 
 class GoogleSTT:
     
@@ -7,7 +10,7 @@ class GoogleSTT:
     
     def transcribe(self, audio):
         try:
-            return self.recognizer.recognize_google(audio, language="es-AR")
+            return self.recognizer.recognize_google(audio, language=STT_LANGUAGE)
         except sr.UnknownValueError:
             return None
         except sr.RequestError:
