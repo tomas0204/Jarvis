@@ -21,5 +21,8 @@ class LLM:
         })
         
         self.messages = self.messages[-LLM_MAX_HISTORY:]
-
+        
+        if response is None:
+            return "Lo siento, no pude obtener una respuesta en este momento."
+        
         return response
