@@ -2,6 +2,12 @@ from ai.llm import LLM
 
 llm = LLM()
 
-response = llm.ask("Hola JARVIS, preséntate.")
+while True:
+    message = input("Tú: ")
 
-print(response)
+    if message.lower() == "salir":
+        break
+
+    response = llm.ask(message)
+
+    print(f"JARVIS: {response}")

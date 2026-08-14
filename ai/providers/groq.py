@@ -5,12 +5,12 @@ class GroqProvider:
     def __init__(self):
         self.client = Groq(api_key=GROQ_API_KEY)
     
-    def ask(self, message):
+    def ask(self, messages):
         response = self.client.chat.completions.create(
             model=LLM_MODEL,
             messages=[
                 {"role": "system", "content": LLM_SYSTEM_PROMPT},
-                {"role": "user", "content": message}
+                *messages
             ]
         )
 
