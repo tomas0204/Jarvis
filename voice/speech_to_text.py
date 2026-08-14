@@ -1,10 +1,12 @@
 import speech_recognition as sr
+from voice.providers.google import GoogleSTT
 
 class SpeechToText:
 
     def __init__(self):
         self.recognizer = sr.Recognizer()
         self.microphone = sr.Microphone()
+        self.provider = GoogleSTT()
 
     def calibrate(self):
         with self.microphone as source:
@@ -28,15 +30,5 @@ class SpeechToText:
     def transcribe(self, audio):
         if audio is None:
             return None
-
-        try:
-            return self.recognizer.recognize_google(
-                audio,
-                language="es-AR"
-            )
-        except sr.UnknownValueError:
-            print("No pude entenderte.")
-            return None
-        except sr.RequestError:
-            print("No pude conectarme al servicio de reconocimiento.")
-            return None
+        
+        return self.provider.transcribe(audio)
