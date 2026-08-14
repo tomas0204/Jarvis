@@ -14,11 +14,20 @@ class SpeechToText:
     def listen(self):
         with self.microphone as source:
             print("Escuchando...")
-            audio = self.recognizer.listen(
-            source,
-            timeout=5,
-            phrase_time_limit=10
-        )
+
+            try:
+                return self.recognizer.listen(
+                    source,
+                    timeout=5,
+                    phrase_time_limit=10
+                )
+            except sr.WaitTimeoutError:
+                print("No detecté ninguna voz.")
+                return None
+
+    def transcribe(self, audio):
+        if audio is None:
+            return None
 
         try:
             return self.recognizer.recognize_google(
@@ -27,4 +36,7 @@ class SpeechToText:
             )
         except sr.UnknownValueError:
             print("No pude entenderte.")
+            return None
+        except sr.RequestError:
+            print("No pude conectarme al servicio de reconocimiento.")
             return None

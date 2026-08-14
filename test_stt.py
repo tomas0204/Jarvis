@@ -4,6 +4,7 @@ stt = SpeechToText()
 
 stt.calibrate()
 
-text = stt.listen()
+audio = stt.listen()
+text = stt.transcribe(audio)
 
 print(f"Has dicho: {text}")
