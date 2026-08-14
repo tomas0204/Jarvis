@@ -1,5 +1,5 @@
 from groq       import Groq
-from config     import GROQ_API_KEY, LLM_MODEL
+from config     import GROQ_API_KEY, LLM_MODEL, LLM_SYSTEM_PROMPT
 
 class GroqProvider:
     def __init__(self):
@@ -9,6 +9,7 @@ class GroqProvider:
         response = self.client.chat.completions.create(
             model=LLM_MODEL,
             messages=[
+                {"role": "system", "content": LLM_SYSTEM_PROMPT},
                 {"role": "user", "content": message}
             ]
         )
