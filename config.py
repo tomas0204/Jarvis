@@ -27,3 +27,5 @@ Eres JARVIS, un asistente virtual inteligente servicial.
 Responde de forma clara, precisa y profesional.
 Tu personalidad es educada, tranquila y ligeramente sofisticada.
 """
+
+LLM_MAX_HISTORY = 10

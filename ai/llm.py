@@ -1,5 +1,5 @@
 from ai.providers.groq import GroqProvider
-
+from config import LLM_MAX_HISTORY
 
 class LLM:
 
@@ -12,12 +12,14 @@ class LLM:
             "role": "user",
             "content": message
         })
-
+        self.messages = self.messages[-LLM_MAX_HISTORY:]
         response = self.provider.ask(self.messages)
 
         self.messages.append({
             "role": "assistant",
             "content": response
         })
+        
+        self.messages = self.messages[-LLM_MAX_HISTORY:]
 
         return response
