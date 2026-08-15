@@ -1,5 +1,6 @@
 import Header from '../components/Header'
 import SystemPanel from '../components/SystemPanel'
+import ConversationPanel from '../components/ConversationPanel'
 
 function Dashboard() {
   return (
@@ -15,11 +16,7 @@ function Dashboard() {
           </div>
         </section>
 
-        <aside className="right-panel">
-          <div className="panel-placeholder">
-            CONVERSATION
-          </div>
-        </aside>
+        <ConversationPanel />
       </section>
 
       <footer className="control-bar">
