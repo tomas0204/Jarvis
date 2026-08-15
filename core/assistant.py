@@ -43,7 +43,10 @@ class Assistant:
             return False
         
         if intent["type"] == "command":
-            result = self.registry.execute(intent["name"])
+            result = self.registry.execute(
+                intent["name"],
+                intent.get("args", {})
+            )
 
             self.tts.speak(result.response)
 

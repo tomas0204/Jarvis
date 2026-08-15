@@ -12,13 +12,22 @@ class CommandRegistry:
     def register(self, name, function):
         self.commands[name] = function
 
-    def execute(self, name):
+    def execute(self, name, args=None):
         command = self.commands.get(name)
-        print(f"Executing command: {name}")  # Debugging line
-        if command is None:
+
+        if not command:
             return CommandResult(
                 False,
-                "No conozco ese comando."
+                f"Comando desconocido: {name}"
             )
 
-        return command()
+        args = args or {}
+
+        try:
+            return command(**args)
+
+        except Exception as e:
+            return CommandResult(
+                False,
+                f"Error ejecutando el comando: {e}"
+            )

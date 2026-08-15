@@ -35,3 +35,15 @@ APPLICATIONS = {
     "chrome": "C:\Program Files\Google\Chrome\Application\chrome.exe",
     "steam": "C:\Program Files (x86)\Steam\steam.exe",
 }
+
+WEBSITES = {
+    "youtube": "https://www.youtube.com",
+    "github": "https://github.com",
+    "google": "https://www.google.com",
+    "gmail": "https://mail.google.com",
+    "chatgpt": "https://chatgpt.com",
+    "kick": "https://kick.com",
+    "twitch": "https://www.twitch.tv",
+    "netflix": "https://www.netflix.com",
+    "whatsapp": "https://web.whatsapp.com",
+}
