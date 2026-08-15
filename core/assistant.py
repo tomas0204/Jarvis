@@ -3,18 +3,18 @@ from voice.text_to_speech   import TextToSpeech
 from ai.llm                 import LLM
 from core.intent            import Intent
 from commands.system        import SystemCommands
-from config                 import APPLICATIONS
 from commands.registry      import CommandRegistry
+from commands.applications  import ApplicationCommands
 
 class Assistant:
     def __init__(self):
         self.stt = SpeechToText()
         self.commands = SystemCommands()
         self.registry = CommandRegistry()
-
+        self.applications = ApplicationCommands(self.commands)
         self.registry.register(
             "open_chrome",
-            lambda: self.commands.open_application(APPLICATIONS["chrome"]),
+            self.applications.open_chrome
         )
         
         self.tts = TextToSpeech()
