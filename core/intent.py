@@ -1,3 +1,13 @@
+COMMAND_WORDS = [
+    "abre",
+    "abrir",
+    "abri",
+    "ejecuta",
+    "ejecutar",
+    "inicia",
+    "iniciar"
+]
+
 class Intent: 
     
     def detect(self, text):
@@ -9,11 +19,12 @@ class Intent:
                 "name": None
             }
 
-        if "abre chrome" in text or "abrir chrome" in text:
-            return {
-                "type": "command",
-                "name": "open_chrome"
-            }
+        if any(word in text for word in COMMAND_WORDS):
+            if "chrome" in text:
+                return {
+                    "type": "command",
+                    "name": "open_chrome"
+                }
 
         return {
             "type": "conversation",
