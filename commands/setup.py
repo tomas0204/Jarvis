@@ -33,3 +33,8 @@ def register_commands(registry, system):
         "open_website",
         web.open_website
     )
+    
+    registry.register(
+        "search_website",
+        web.search_website
+    )
