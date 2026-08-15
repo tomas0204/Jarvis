@@ -2,6 +2,7 @@ import Header from '../components/Header'
 import SystemPanel from '../components/SystemPanel'
 import JarvisCore from '../components/JarvisCore'
 import ConversationPanel from '../components/ConversationPanel'
+import ControlBar from '../components/ControlBar'
 
 function Dashboard() {
   return (
@@ -10,17 +11,11 @@ function Dashboard() {
 
       <section className="dashboard-content">
         <SystemPanel />
-
         <JarvisCore />
-
         <ConversationPanel />
       </section>
 
-      <footer className="control-bar">
-        <button>MIC</button>
-        <button>KEYBOARD</button>
-        <button>CAMERA</button>
-      </footer>
+      <ControlBar />
     </main>
   )
 }

@@ -10,7 +10,7 @@ function JarvisCore() {
 
         <div className="core-center">
           <FiActivity />
-          <span>J.A.R.V.I.S</span>
+          <h6>J . A . R . V . I . S</h6>
           <small>STANDBY</small>
         </div>
       </div>
