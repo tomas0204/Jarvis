@@ -4,11 +4,19 @@ from ai.llm                 import LLM
 from core.intent            import Intent
 from commands.system        import SystemCommands
 from config                 import APPLICATIONS
+from commands.registry      import CommandRegistry
 
 class Assistant:
     def __init__(self):
         self.stt = SpeechToText()
         self.commands = SystemCommands()
+        self.registry = CommandRegistry()
+
+        self.registry.register(
+            "open_chrome",
+            lambda: self.commands.open_application(APPLICATIONS["chrome"]),
+        )
+        
         self.tts = TextToSpeech()
         self.llm = LLM()
         self.intent = Intent()
@@ -29,18 +37,20 @@ class Assistant:
 
         intent = self.intent.detect(text)
 
-        if intent == "exit":
+        if intent["type"] == "exit":
             self.tts.speak("Hasta luego. ¡Que tengas un buen día!")
             return False
-        if intent == "open_chrome":
-            success = self.commands.open_application(APPLICATIONS["chrome"])
+        
+        if intent["type"] == "command":
+            success = self.registry.execute(intent["name"])
 
             if success:
-                self.tts.speak("Abriendo Chrome.")
+                self.tts.speak(f"Comando ejecutado correctamente. Abriendo Aplicación: {intent['name'].replace('open_', '')}")
             else:
-                self.tts.speak("No pude abrir Chrome.")
+                self.tts.speak("No pude ejecutar el comando.")
 
-                return True
+            return True
+        
         self.process(text)
 
         return True

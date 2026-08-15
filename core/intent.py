@@ -4,9 +4,18 @@ class Intent:
         text = text.lower().strip()
 
         if text in ["salir", "terminar", "adiós"]:
-            return "exit"
+            return {
+                "type": "exit",
+                "name": None
+            }
 
         if "abre chrome" in text or "abrir chrome" in text:
-            return "open_chrome"
+            return {
+                "type": "command",
+                "name": "open_chrome"
+            }
 
-        return "conversation"
+        return {
+            "type": "conversation",
+            "name": None
+        }
