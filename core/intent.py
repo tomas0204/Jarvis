@@ -25,6 +25,12 @@ class Intent:
                     "type": "command",
                     "name": "open_chrome"
                 }
+            
+            if "steam" in text:
+                return {
+                    "type": "command",
+                    "name": "open_steam"
+                }
 
         return {
             "type": "conversation",

@@ -10,9 +10,9 @@ if not GROQ_API_KEY:
 
 STT_LANGUAGE = "es-AR"
 
-STT_TIMEOUT = 5
+STT_TIMEOUT = 7
 
-STT_PHRASE_TIME_LIMIT = 10
+STT_PHRASE_TIME_LIMIT = 16
 
 TTS_RATE = 180
 
@@ -33,4 +33,5 @@ LLM_MAX_HISTORY = 10
 
 APPLICATIONS = {
     "chrome": "C:\Program Files\Google\Chrome\Application\chrome.exe",
+    "steam": "C:\Program Files (x86)\Steam\steam.exe",
 }

@@ -16,7 +16,10 @@ class Assistant:
             "open_chrome",
             self.applications.open_chrome
         )
-        
+        self.registry.register(
+            "open_steam",
+            self.applications.open_steam
+        )
         self.tts = TextToSpeech()
         self.llm = LLM()
         self.intent = Intent()
@@ -45,7 +48,7 @@ class Assistant:
             success = self.registry.execute(intent["name"])
 
             if success:
-                self.tts.speak(f"Comando ejecutado correctamente. Abriendo Aplicación: {intent['name'].replace('open_', '')}")
+                self.tts.speak(f"Comando ejecutado correctamente, abriendo {intent['name'].replace('open_', '')}")
             else:
                 self.tts.speak("No pude ejecutar el comando.")
 

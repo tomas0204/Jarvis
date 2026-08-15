@@ -10,3 +10,7 @@ class ApplicationCommands:
         return self.system.open_application(
             APPLICATIONS["chrome"]
         )
+    def open_steam(self):
+        return self.system.open_application(
+            APPLICATIONS["steam"]
+        )
