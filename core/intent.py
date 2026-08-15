@@ -15,13 +15,112 @@ OPEN_WORDS = [
     "entrar"
 ]
 
+
 class Intent:
-    
+
+    def detect(self, text):
+        text = self._normalize(text)
+        words = text.split()
+
+        if text in ["salir", "terminar", "adiós", "adios", "chau", "chao", "desactivate", "desactivar", "apagate", "apagar"]:
+            return {
+                "type": "exit",
+                "name": None,
+                "args": {}
+            }
+
+        # Buscar en web
+        result = self._detect_search(text)
+
+        if result:
+            return result
+
+        # Abrir sitio web
+        result = self._detect_website(words)
+
+        if result:
+            return result
+
+        # Abrir aplicaciones
+        result = self._detect_application(words)
+
+        if result:
+            return result
+
+        # Hora
+        if "qué hora" in text or "que hora" in text:
+            return {
+                "type": "command",
+                "name": "get_time",
+                "args": {}
+            }
+
+        # Fecha
+        if (
+            "qué fecha" in text
+            or "que fecha" in text
+            or "qué día" in text
+            or "que día" in text
+            or "dia" in text
+        ):
+            return {
+                "type": "command",
+                "name": "get_date",
+                "args": {}
+            }
+
+        return {
+            "type": "conversation",
+            "name": None,
+            "args": {}
+        }
+
+    def _detect_search(self, text):
+        if not text.startswith("busca "):
+            return None
+
+        query = text[6:].strip()
+
+        if not query:
+            return None
+
+        for website in WEBSITES:
+
+            phrase = f"en {website}"
+
+            if phrase in query:
+                search_query = query.replace(
+                    phrase,
+                    ""
+                ).strip()
+
+                if not search_query:
+                    return None
+
+                return {
+                    "type": "command",
+                    "name": "search_website",
+                    "args": {
+                        "name": website,
+                        "query": search_query
+                    }
+                }
+
+        return {
+            "type": "command",
+            "name": "search_website",
+            "args": {
+                "name": "google",
+                "query": query
+            }
+        }
+
     def _detect_website(self, words):
         if not any(word in words for word in OPEN_WORDS):
             return None
 
         for website, url in WEBSITES.items():
+
             if website in words:
                 return {
                     "type": "command",
@@ -34,76 +133,25 @@ class Intent:
 
         return None
 
-    def detect(self, text):
-        text = self._normalize(text)
-        words = text.split()
+    def _detect_application(self, words):
+        if not any(word in words for word in OPEN_WORDS):
+            return None
 
-        if text in ["salir", "terminar", "adiós"]:
-            return {
-                "type": "exit",
-                "name": None,
-                "args": {}
-            }
-            
-        result = self._detect_website(words)
-        
-        if result:
-            return result
-
-        if any(word in words for word in OPEN_WORDS):
-
-            if "chrome" in words or "navegador" in words:
-                return {
-                    "type": "command",
-                    "name": "open_chrome",
-                    "args": {}
-                }
-
-            if "steam" in words or "juego" in words:
-                return {
-                    "type": "command",
-                    "name": "open_steam",
-                    "args": {}
-                }
-
-        if "qué hora" in text or "que hora" in text:
+        if "chrome" in words or "navegador" in words:
             return {
                 "type": "command",
-                "name": "get_time",
+                "name": "open_chrome",
                 "args": {}
             }
 
-        if (
-            "qué fecha" in text
-            or "que fecha" in text
-            or "qué día" in text
-            or "que día" in text
-        ):
+        if "steam" in words or "juego" in words:
             return {
                 "type": "command",
-                "name": "get_date",
+                "name": "open_steam",
                 "args": {}
             }
 
-        if any(word in words for word in OPEN_WORDS):
-
-            for website, url in WEBSITES.items():
-
-                if website in words:
-                    return {
-                        "type": "command",
-                        "name": "open_website",
-                        "args": {
-                            "name": website,
-                            "url": url
-                        }
-                    }
-
-        return {
-            "type": "unknown",
-            "name": None,
-            "args": {}
-        }
+        return None
 
     def _normalize(self, text):
         text = text.lower().strip()

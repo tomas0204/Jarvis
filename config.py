@@ -39,11 +39,18 @@ APPLICATIONS = {
 WEBSITES = {
     "youtube": "https://www.youtube.com",
     "github": "https://github.com",
-    "google": "https://www.google.com",
     "gmail": "https://mail.google.com",
     "chatgpt": "https://chatgpt.com",
-    "kick": "https://kick.com",
+    "verde": "https://kick.com",
     "twitch": "https://www.twitch.tv",
     "netflix": "https://www.netflix.com",
     "whatsapp": "https://web.whatsapp.com",
+}
+
+SEARCH_URLS = {
+    "youtube": "https://www.youtube.com/results?search_query={query}",
+    "github": "https://github.com/search?q={query}",
+    "google": "https://www.google.com/search?q={query}",
+    "twitch": "https://www.twitch.tv/search?term={query}",
+    "reddit": "https://www.reddit.com/search/?q={query}",
 }
