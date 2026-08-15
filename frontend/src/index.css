@@ -158,3 +158,24 @@ button {
 .control-bar button:hover {
   background: rgba(0, 200, 255, 0.08);
 }
+
+.status-icon {
+  color: #00d9ff;
+  font-size: 14px;
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #78909c;
+  font-size: 17px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.icon-button:hover {
+  color: #00d9ff;
+}
