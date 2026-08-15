@@ -1,4 +1,5 @@
 import Header from '../components/Header'
+import SystemPanel from '../components/SystemPanel'
 
 function Dashboard() {
   return (
@@ -6,11 +7,7 @@ function Dashboard() {
       <Header />
 
       <section className="dashboard-content">
-        <aside className="left-panel">
-          <div className="panel-placeholder">
-            SYSTEM
-          </div>
-        </aside>
+        <SystemPanel />
 
         <section className="core-panel">
           <div className="core-placeholder">
