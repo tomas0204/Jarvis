@@ -1,5 +1,6 @@
 import Header from '../components/Header'
 import SystemPanel from '../components/SystemPanel'
+import JarvisCore from '../components/JarvisCore'
 import ConversationPanel from '../components/ConversationPanel'
 
 function Dashboard() {
@@ -10,11 +11,7 @@ function Dashboard() {
       <section className="dashboard-content">
         <SystemPanel />
 
-        <section className="core-panel">
-          <div className="core-placeholder">
-            <span>J.A.R.V.I.S</span>
-          </div>
-        </section>
+        <JarvisCore />
 
         <ConversationPanel />
       </section>

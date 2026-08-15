@@ -372,3 +372,101 @@ button {
   cursor: pointer;
   font-size: 15px;
 }
+
+.core-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background:
+    radial-gradient(
+      circle,
+      rgba(0, 217, 255, 0.08) 0%,
+      rgba(3, 9, 15, 0) 45%
+    ),
+    rgba(3, 9, 15, 0.94);
+  overflow: hidden;
+}
+
+.jarvis-core {
+  position: relative;
+  width: 360px;
+  height: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.core-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 217, 255, 0.25);
+}
+
+.core-ring-outer {
+  width: 340px;
+  height: 340px;
+  border-style: dashed;
+  opacity: 0.5;
+}
+
+.core-ring-middle {
+  width: 270px;
+  height: 270px;
+  border-color: rgba(0, 217, 255, 0.4);
+}
+
+.core-ring-inner {
+  width: 190px;
+  height: 190px;
+  border-color: rgba(0, 217, 255, 0.55);
+  box-shadow:
+    0 0 25px rgba(0, 217, 255, 0.08),
+    inset 0 0 25px rgba(0, 217, 255, 0.08);
+}
+
+.core-center {
+  position: relative;
+  z-index: 2;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 7px;
+  border: 1px solid rgba(0, 217, 255, 0.6);
+  background: rgba(3, 12, 18, 0.95);
+  box-shadow:
+    0 0 30px rgba(0, 217, 255, 0.15),
+    inset 0 0 20px rgba(0, 217, 255, 0.08);
+}
+
+.core-center svg {
+  color: #00d9ff;
+  font-size: 24px;
+}
+
+.core-center span {
+  color: #c9f7ff;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+.core-center small {
+  color: #52727c;
+  font-size: 7px;
+  letter-spacing: 2px;
+}
+
+.core-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  color: #52727c;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
