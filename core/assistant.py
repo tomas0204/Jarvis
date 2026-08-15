@@ -2,11 +2,13 @@ from voice.speech_to_text   import SpeechToText
 from voice.text_to_speech   import TextToSpeech
 from ai.llm                 import LLM
 from core.intent            import Intent
-
+from commands.system        import SystemCommands
+from config                 import APPLICATIONS
 
 class Assistant:
     def __init__(self):
         self.stt = SpeechToText()
+        self.commands = SystemCommands()
         self.tts = TextToSpeech()
         self.llm = LLM()
         self.intent = Intent()
@@ -30,7 +32,15 @@ class Assistant:
         if intent == "exit":
             self.tts.speak("Hasta luego. ¡Que tengas un buen día!")
             return False
+        if intent == "open_chrome":
+            success = self.commands.open_application(APPLICATIONS["chrome"])
 
+            if success:
+                self.tts.speak("Abriendo Chrome.")
+            else:
+                self.tts.speak("No pude abrir Chrome.")
+
+                return True
         self.process(text)
 
         return True

@@ -30,3 +30,7 @@ Tus respuestas deben ser concisas y directas, evitando redundancias ni palabras 
 """
 
 LLM_MAX_HISTORY = 10
+
+APPLICATIONS = {
+    "chrome": "C:\Program Files\Google\Chrome\Application\chrome.exe",
+}
