@@ -6,8 +6,8 @@ from config                 import (
 
 class GoogleSTT:
     
-    def __init__(self):
-        self.recognizer = sr.Recognizer()
+    def __init__(self, recognizer):
+        self.recognizer = recognizer
     
     def transcribe(self, audio):
         try:
