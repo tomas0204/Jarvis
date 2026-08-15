@@ -1,5 +1,5 @@
-from datetime import datetime
-from commands.registry import CommandResult
+from datetime                   import datetime
+from backend.commands.registry  import CommandResult
 
 class SystemInfoCommands:
     def get_time(self):

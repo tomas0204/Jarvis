@@ -1,10 +1,10 @@
-from commands.setup         import register_commands
-from voice.speech_to_text   import SpeechToText
-from voice.text_to_speech   import TextToSpeech
-from ai.llm                 import LLM
-from core.intent            import Intent
-from commands.system        import SystemCommands
-from commands.registry      import CommandRegistry
+from backend.commands.setup         import register_commands
+from backend.voice.speech_to_text   import SpeechToText
+from backend.voice.text_to_speech   import TextToSpeech
+from backend.ai.llm                 import LLM
+from backend.core.intent            import Intent
+from backend.commands.system        import SystemCommands
+from backend.commands.registry      import CommandRegistry
 
 class Assistant:
     def __init__(self):

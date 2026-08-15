@@ -1,7 +1,7 @@
-from commands.applications import ApplicationCommands
-from commands.system_info import SystemInfoCommands
-from commands.web import WebCommands
-from config import WEBSITES
+from  backend.commands.applications import ApplicationCommands
+from  backend.commands.system_info import SystemInfoCommands
+from  backend.commands.web import WebCommands
+from  config import WEBSITES
 
 def register_commands(registry, system):
     applications = ApplicationCommands(system)

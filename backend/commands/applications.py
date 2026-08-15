@@ -1,4 +1,4 @@
-from commands.registry  import CommandResult
+from backend.commands.registry  import CommandResult
 from config             import APPLICATIONS
     
 

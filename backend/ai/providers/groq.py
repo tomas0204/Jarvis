@@ -1,6 +1,6 @@
-from groq       import Groq
-from config     import GROQ_API_KEY, LLM_MODEL, LLM_SYSTEM_PROMPT
-from utils.logger import logger
+from groq                   import Groq
+from config                 import GROQ_API_KEY, LLM_MODEL, LLM_SYSTEM_PROMPT
+from backend.utils.logger   import logger
 
 class GroqProvider:
     def __init__(self):

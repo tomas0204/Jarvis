@@ -1,4 +1,4 @@
-from ai.providers.groq import GroqProvider
+from backend.ai.providers.groq import GroqProvider
 from config import LLM_MAX_HISTORY
 
 class LLM:
