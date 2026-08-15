@@ -1,24 +1,22 @@
+from commands.setup         import register_commands
 from voice.speech_to_text   import SpeechToText
 from voice.text_to_speech   import TextToSpeech
 from ai.llm                 import LLM
 from core.intent            import Intent
 from commands.system        import SystemCommands
 from commands.registry      import CommandRegistry
-from commands.applications  import ApplicationCommands
 
 class Assistant:
     def __init__(self):
         self.stt = SpeechToText()
         self.commands = SystemCommands()
         self.registry = CommandRegistry()
-        self.applications = ApplicationCommands(self.commands)
-        self.registry.register(
-            "open_chrome",
-            self.applications.open_chrome
-        )
-        self.registry.register(
-            "open_steam",
-            self.applications.open_steam
+        self.system = SystemCommands()
+        self.registry = CommandRegistry()
+
+        register_commands(
+            self.registry,
+            self.system
         )
         self.tts = TextToSpeech()
         self.llm = LLM()
@@ -45,12 +43,9 @@ class Assistant:
             return False
         
         if intent["type"] == "command":
-            success = self.registry.execute(intent["name"])
+            result = self.registry.execute(intent["name"])
 
-            if success:
-                self.tts.speak(f"Comando ejecutado correctamente, abriendo {intent['name'].replace('open_', '')}")
-            else:
-                self.tts.speak("No pude ejecutar el comando.")
+            self.tts.speak(result.response)
 
             return True
         
