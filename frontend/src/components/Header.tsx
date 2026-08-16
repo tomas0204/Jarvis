@@ -1,6 +1,16 @@
 import { FiSettings, FiWifi } from 'react-icons/fi'
+import useCurrentTime from '../hooks/useCurrentTime'
 
 function Header() {
+  const time = useCurrentTime()
+
+  const formatedTime = time.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  })
+  
+
   return (
     <header className="topbar">
       <div className="brand">
@@ -14,7 +24,7 @@ function Header() {
       </div>
 
       <div className="topbar-right">
-        <span>20:12</span>
+        <span>{formatedTime}</span>
 
         <button className="icon-button" aria-label="Configuración">
           <FiSettings />
