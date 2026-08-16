@@ -16,16 +16,13 @@ function ConversationPanel() {
       id: 1,
       sender: 'JARVIS',
       text: 'Good evening, sir. How can I assist you?',
+      timestamp: new Date()
     },
     {
       id: 2,
       sender: 'USER',
       text: 'What is the current system status?',
-    },
-    {
-      id: 3,
-      sender: 'JARVIS',
-      text: 'All systems are operating normally.',
+      timestamp: new Date()
     },
   ])
 
@@ -38,6 +35,7 @@ function ConversationPanel() {
       id: Date.now(),
       sender: 'USER',
       text: input,
+      timestamp: new Date()
     }
 
     setMessages((currentMessages) => [
@@ -82,6 +80,12 @@ function ConversationPanel() {
             </span>
 
             <p>{message.text}</p>
+            <span className="message-time">
+              {message.timestamp.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </span>
           </div>
         ))}
         <div ref={messagesEndRef} />

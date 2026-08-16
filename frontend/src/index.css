@@ -330,9 +330,10 @@ button {
 }
 
 .message-author {
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 2px;
-  color: #52727c;
+  font-weight: bold;
+  color: #9dafb4;
 }
 
 .message p {
@@ -353,6 +354,14 @@ button {
 .user-message p {
   border-color: rgba(0, 217, 255, 0.2);
   color: #79dff2;
+}
+
+.message-time {
+  display: block;
+  margin-top: 6px;
+  font-size: 9px;
+  letter-spacing: 1px;
+  opacity: 0.45;
 }
 
 .conversation-input {
