@@ -1,7 +1,7 @@
-import speech_recognition   as sr
-from voice.providers.google import GoogleSTT
-from utils.logger           import logger
-from config                 import (
+import speech_recognition           as sr
+from backend.voice.providers.google import GoogleSTT
+from backend.utils.logger           import logger
+from config                         import (
     STT_TIMEOUT,
     STT_PHRASE_TIME_LIMIT
 )

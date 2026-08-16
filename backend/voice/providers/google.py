@@ -1,6 +1,6 @@
-import speech_recognition   as sr
-from utils.logger           import logger
-from config                 import (
+import speech_recognition           as sr
+from backend.utils.logger           import logger
+from config                         import (
     STT_LANGUAGE,
 )
 

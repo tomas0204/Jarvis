@@ -1,7 +1,7 @@
 import webbrowser
-from urllib.parse import quote
-from config import SEARCH_URLS
-from commands.registry import CommandResult
+from urllib.parse               import quote
+from config                     import SEARCH_URLS
+from backend.commands.registry  import CommandResult
 
 
 class WebCommands:

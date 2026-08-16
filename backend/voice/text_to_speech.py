@@ -1,6 +1,6 @@
 import pyttsx3
-from config import TTS_RATE, TTS_VOICE, TTS_VOLUME
-from utils.logger import logger
+from config                 import TTS_RATE, TTS_VOICE, TTS_VOLUME
+from backend.utils.logger   import logger
 
 class TextToSpeech:
 

@@ -1,0 +1,129 @@
+.conversation-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  min-height: 0;
+  background: rgba(3, 9, 15, 0.94);
+}
+
+.conversation-messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 8px 2px 20px;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 90%;
+  animation: message-enter 0.3s ease-out;
+}
+
+.message-author {
+  font-size: 8px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  color: #9dafb4;
+}
+
+.message p {
+  margin: 0;
+  padding: 10px 12px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #b8d9df;
+  border: 1px solid rgba(0, 217, 255, 0.1);
+  background: rgba(0, 217, 255, 0.025);
+}
+
+.user-message {
+  align-self: flex-end;
+  text-align: right;
+}
+
+.user-message p {
+  border-color: rgba(0, 217, 255, 0.2);
+  color: #79dff2;
+}
+
+.message-time {
+  display: block;
+  margin-top: 6px;
+  font-size: 9px;
+  letter-spacing: 1px;
+  opacity: 0.45;
+}
+
+.conversation-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 42px;
+  padding: 0 10px;
+  border: 1px solid rgba(0, 217, 255, 0.18);
+  background: rgba(0, 217, 255, 0.025);
+}
+
+.conversation-input > svg {
+  color: #52727c;
+  font-size: 15px;
+}
+
+.conversation-input input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #c9f7ff;
+  font-family: inherit;
+  font-size: 11px;
+}
+
+.conversation-input input::placeholder {
+  color: #38535b;
+}
+
+.conversation-input button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #00d9ff;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.conversation-messages::-webkit-scrollbar {
+  width: 4px;
+}
+
+.conversation-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.conversation-messages::-webkit-scrollbar-thumb {
+  background: rgba(0, 200, 255, 0.35);
+  border-radius: 10px;
+}
+
+.conversation-messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 200, 255, 0.65);
+}
+
+@keyframes message-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
