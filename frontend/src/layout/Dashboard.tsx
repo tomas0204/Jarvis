@@ -1,10 +1,10 @@
 import { useState } from 'react'
-
 import Header from '../components/Header'
 import SystemPanel from '../components/SystemPanel'
 import JarvisCore from '../components/JarvisCore'
 import ConversationPanel from '../components/ConversationPanel'
 import ControlBar from '../components/ControlBar'
+import './Dashboard.css'
 
 import type { JarvisState } from '../types/jarvis'
 

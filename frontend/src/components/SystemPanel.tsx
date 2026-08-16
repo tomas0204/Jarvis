@@ -1,3 +1,4 @@
+import "./styles/SystemPanel.css"
 import {
   FiCpu,
   FiHardDrive,

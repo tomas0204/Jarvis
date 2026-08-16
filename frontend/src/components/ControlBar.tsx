@@ -1,3 +1,4 @@
+import "./styles/ControlBar.css"
 import {
   FiMic,
   FiCommand,

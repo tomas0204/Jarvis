@@ -1,3 +1,4 @@
+import "./styles/JarvisCore.css"
 import { FiActivity, FiMic, FiCpu, FiVolume2 } from 'react-icons/fi'
 import type { JarvisState } from '../types/jarvis'
 

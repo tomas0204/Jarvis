@@ -1,5 +1,6 @@
 import { FiSettings, FiWifi } from 'react-icons/fi'
 import useCurrentTime from '../hooks/useCurrentTime'
+import "./styles/Header.css"
 
 function Header() {
   const time = useCurrentTime()

@@ -1,0 +1,32 @@
+.dashboard {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(circle at center, #0a1720 0%, #03070c 55%);
+}
+
+.dashboard-content {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 280px 1fr 320px;
+  gap: 1px;
+  background: rgba(0, 200, 255, 0.08);
+}
+
+.left-panel,
+.core-panel,
+.right-panel {
+  background: rgba(3, 9, 15, 0.94);
+}
+
+.panel-placeholder {
+  height: 100%;
+  border: 1px solid rgba(0, 200, 255, 0.15);
+  padding: 16px;
+  color: #4e8291;
+  font-size: 11px;
+  letter-spacing: 2px;
+}

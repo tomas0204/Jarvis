@@ -1,3 +1,4 @@
+import "./styles/ConversationPanel.css"
 import { FiMessageSquare, FiSend } from 'react-icons/fi'
 import type { Message } from "../types/jarvis"
 import { useState, useRef, useEffect } from "react"
