@@ -25,22 +25,31 @@ function JarvisCore({ state }: JarvisCoreProps) {
   return (
     <section className={`core-panel state-${state.toLowerCase()}`}>
       <div className="jarvis-core">
+
+        <div className="core-radial">
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
+
+        <div className="core-orbit">
+            <span className="orbit-marker"></span>
+            <span className="orbit-marker"></span>
+            <span className="orbit-marker"></span>
+        </div>
+
         <div className="core-ring core-ring-outer" />
         <div className="core-ring core-ring-middle" />
         <div className="core-ring core-ring-inner" />
 
         <div className="core-center">
-          {getStateIcon()}
 
-          <span>J.A.R.V.I.S</span>
-
-          <small>{state}</small>
         </div>
-      </div>
-
-      <div className="core-status">
-        <span className="status-dot" />
-        SYSTEM {state}
       </div>
     </section>
   )
