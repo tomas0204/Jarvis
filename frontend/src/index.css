@@ -493,3 +493,192 @@ button {
   font-size: 9px;
   letter-spacing: 2px;
 }
+/* ========================================
+   JARVIS CORE ANIMATIONS
+   ======================================== */
+
+.core-ring-outer {
+  animation: rotate-clockwise 20s linear infinite;
+}
+
+.core-ring-middle {
+  animation: rotate-counter-clockwise 12s linear infinite;
+}
+
+.core-ring-inner {
+  animation: core-pulse 3s ease-in-out infinite;
+}
+
+.core-center {
+  animation: center-pulse 3s ease-in-out infinite;
+}
+
+
+/* IDLE */
+
+.state-idle .core-ring-outer {
+  animation-duration: 20s;
+}
+
+.state-idle .core-ring-middle {
+  animation-duration: 12s;
+}
+
+.state-idle .core-ring-inner {
+  animation-duration: 3s;
+}
+
+
+/* LISTENING */
+
+.state-listening .core-ring-outer {
+  animation-duration: 8s;
+}
+
+.state-listening .core-ring-middle {
+  animation-duration: 5s;
+}
+
+.state-listening .core-ring-inner {
+  animation: listening-pulse 1s ease-in-out infinite;
+}
+
+.state-listening .core-center {
+  animation: listening-center 1s ease-in-out infinite;
+}
+
+
+/* PROCESSING */
+
+.state-processing .core-ring-outer {
+  animation-duration: 3s;
+}
+
+.state-processing .core-ring-middle {
+  animation-duration: 2s;
+}
+
+.state-processing .core-ring-inner {
+  animation: processing-pulse 0.8s ease-in-out infinite;
+}
+
+
+/* SPEAKING */
+
+.state-speaking .core-ring-inner {
+  animation: speaking-pulse 0.5s ease-in-out infinite;
+}
+
+.state-speaking .core-center {
+  animation: speaking-center 0.5s ease-in-out infinite;
+}
+
+
+/* ========================================
+   KEYFRAMES
+   ======================================== */
+
+@keyframes rotate-clockwise {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate-counter-clockwise {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes core-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes center-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 30px rgba(0, 217, 255, 0.15),
+      inset 0 0 20px rgba(0, 217, 255, 0.08);
+  }
+
+  50% {
+    box-shadow:
+      0 0 45px rgba(0, 217, 255, 0.25),
+      inset 0 0 30px rgba(0, 217, 255, 0.12);
+  }
+}
+
+@keyframes listening-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes listening-center {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes processing-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+@keyframes speaking-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes speaking-center {
+  0%,
+  100% {
+    box-shadow:
+      0 0 30px rgba(0, 217, 255, 0.15),
+      inset 0 0 20px rgba(0, 217, 255, 0.08);
+  }
+
+  50% {
+    box-shadow:
+      0 0 60px rgba(0, 217, 255, 0.35),
+      inset 0 0 35px rgba(0, 217, 255, 0.15);
+  }
+}
