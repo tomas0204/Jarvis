@@ -1,6 +1,54 @@
 import { FiMessageSquare, FiSend } from 'react-icons/fi'
+import type { Message } from "../types/jarvis"
+import { useState } from "react"
 
 function ConversationPanel() {
+
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 1,
+      sender: 'JARVIS',
+      text: 'Good evening, sir. How can I assist you?',
+    },
+    {
+      id: 2,
+      sender: 'USER',
+      text: 'What is the current system status?',
+    },
+    {
+      id: 3,
+      sender: 'JARVIS',
+      text: 'All systems are operating normally.',
+    },
+  ])
+
+  const [input, setInput] = useState('')
+
+  const handleSend = () => {
+    if (!input.trim()) return
+
+    const newMessage: Message = {
+      id: Date.now(),
+      sender: 'USER',
+      text: input,
+    }
+
+    setMessages((currentMessages) => [
+      ...currentMessages,
+      newMessage,
+    ])
+
+    setInput('')
+  }
+
+  const sender = (send: string) => {
+    if (send == "JARVIS") {
+      return "message assistant-message message-author"
+    } else {
+      return "message user-message message-author"
+    }
+  }
+
   return (
     <aside className="conversation-panel">
       <div className="panel-header">
@@ -9,20 +57,18 @@ function ConversationPanel() {
       </div>
 
       <div className="conversation-messages">
-        <div className="message assistant-message">
-          <span className="message-author">J.A.R.V.I.S</span>
-          <p>Good evening. How may I assist you?</p>
-        </div>
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={`message ${message.sender.toLowerCase()}-message`}
+          >
+            <span className={sender(message.sender)}>
+              {message.sender}
+            </span>
 
-        <div className="message user-message">
-          <span className="message-author">YOU</span>
-          <p>Show me the system status.</p>
-        </div>
-
-        <div className="message assistant-message">
-          <span className="message-author">J.A.R.V.I.S</span>
-          <p>All systems are operating normally.</p>
-        </div>
+            <p>{message.text}</p>
+          </div>
+        ))}
       </div>
 
       <div className="conversation-input">
@@ -31,9 +77,11 @@ function ConversationPanel() {
         <input
           type="text"
           placeholder="Enter command..."
+          value={input}
+          onChange={(event) => setInput(event.target.value)}
         />
 
-        <button aria-label="Send command">
+        <button onClick={handleSend} aria-label="Send command">
           <FiSend />
         </button>
       </div>

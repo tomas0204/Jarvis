@@ -3,3 +3,9 @@ export type JarvisState =
   | 'LISTENING'
   | 'PROCESSING'
   | 'SPEAKING'
+
+export interface Message {
+    id: number,
+    sender: "JARVIS" | "USER"
+    text: string
+}
