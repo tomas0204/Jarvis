@@ -1,9 +1,16 @@
 import { FiMessageSquare, FiSend } from 'react-icons/fi'
 import type { Message } from "../types/jarvis"
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 
 function ConversationPanel() {
 
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: 'smooth',
+    })
+  }
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -39,7 +46,15 @@ function ConversationPanel() {
     ])
 
     setInput('')
+
+    scrollToBottom()
   }
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: 'smooth',
+    })
+  }, [messages])
 
   const sender = (send: string) => {
     if (send == "JARVIS") {
@@ -69,6 +84,7 @@ function ConversationPanel() {
             <p>{message.text}</p>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
 
       <div className="conversation-input">
@@ -79,6 +95,11 @@ function ConversationPanel() {
           placeholder="Enter command..."
           value={input}
           onChange={(event) => setInput(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              handleSend()
+            }
+          }}
         />
 
         <button onClick={handleSend} aria-label="Send command">
