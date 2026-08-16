@@ -5,27 +5,46 @@ import {
   FiVolume2,
 } from 'react-icons/fi'
 
-function ControlBar() {
+import type { JarvisState } from '../types/jarvis'
+
+interface ControlBarProps {
+  state: JarvisState
+  onStateChange: (state: JarvisState) => void
+}
+
+function ControlBar({ state, onStateChange }: ControlBarProps) {
   return (
     <footer className="control-bar">
-      <button className="control-button active">
+      <button
+        className={`control-button ${state === 'LISTENING' ? 'active' : ''}`}
+        onClick={() => onStateChange('LISTENING')}
+      >
         <FiMic />
         <span>MICROPHONE</span>
       </button>
 
-      <button className="control-button">
+      <button
+        className={`control-button ${state === 'PROCESSING' ? 'active' : ''}`}
+        onClick={() => onStateChange('PROCESSING')}
+      >
         <FiCommand />
-        <span>KEYBOARD</span>
+        <span>PROCESSING</span>
       </button>
 
-      <button className="control-button">
-        <FiCamera />
-        <span>CAMERA</span>
-      </button>
-
-      <button className="control-button">
+      <button
+        className={`control-button ${state === 'SPEAKING' ? 'active' : ''}`}
+        onClick={() => onStateChange('SPEAKING')}
+      >
         <FiVolume2 />
-        <span>VOICE</span>
+        <span>SPEAKING</span>
+      </button>
+
+      <button
+        className={`control-button ${state === 'IDLE' ? 'active' : ''}`}
+        onClick={() => onStateChange('IDLE')}
+      >
+        <FiCamera />
+        <span>IDLE</span>
       </button>
     </footer>
   )
