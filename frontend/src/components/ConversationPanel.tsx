@@ -2,10 +2,11 @@ import "./styles/ConversationPanel.css"
 import { FiMessageSquare, FiSend } from 'react-icons/fi'
 import type { Message } from "../types/jarvis"
 import { useState, useRef, useEffect } from "react"
+import { jarvisService } from "../services/jarvis"
 
 interface ConversationPanelProps {
   messages: Message[]
-  onSendMessage: (text: string) => void
+  onSendMessage: (message: Message) => void
 }
 
 function ConversationPanel({
@@ -22,12 +23,37 @@ function ConversationPanel({
     })
   }, [messages])
 
-  const handleSend = () => {
-    if (!input.trim()) return
+  const handleSend = async () => {
+    const text = input.trim()
 
-    onSendMessage(input.trim())
+    if (!text) return
 
     setInput('')
+
+    const userMessage: Message = {
+      id: Date.now(),
+      sender: "USER",
+      text,
+      timestamp: new Date(),
+    }
+
+    onSendMessage(userMessage)
+
+    try {
+      const data = await jarvisService.sendMessage(text)
+
+      const jarvisMessage: Message = {
+        id: Date.now() + 1,
+        sender: "JARVIS",
+        text: data.response,
+        timestamp: new Date(),
+      }
+
+      onSendMessage(jarvisMessage)
+
+    } catch (error) {
+      console.error("Error enviando mensaje:", error)
+    }
   }
 
   const sender = (send: Message['sender']) => {

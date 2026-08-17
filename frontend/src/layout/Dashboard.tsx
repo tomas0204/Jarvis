@@ -12,31 +12,12 @@ function Dashboard() {
   const [jarvisState, setJarvisState] = useState<JarvisState>('IDLE')
 
   const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      sender: 'JARVIS',
-      text: 'Good evening, sir. How can I assist you?',
-      timestamp: new Date()
-    },
-    {
-      id: 2,
-      sender: 'USER',
-      text: 'What is the current system status?',
-      timestamp: new Date()
-    },
   ])
 
-  const handleSendMessage = (text: string) => {
-    const newMessage: Message = {
-      id: Date.now(),
-      sender: 'USER',
-      text,
-      timestamp: new Date()
-    }
-
+  const handleSendMessage = (message: Message) => {
     setMessages((currentMessages) => [
       ...currentMessages,
-      newMessage,
+      message,
     ])
   }
 
