@@ -32,11 +32,12 @@ function ConversationPanel({
 
     const userMessage: Message = {
       id: Date.now(),
-      sender: "USER",
+      sender: 'USER',
       text,
       timestamp: new Date(),
     }
 
+    // Mostrar mensaje del usuario
     onSendMessage(userMessage)
 
     try {
@@ -44,39 +45,43 @@ function ConversationPanel({
 
       const jarvisMessage: Message = {
         id: Date.now() + 1,
-        sender: "JARVIS",
+        sender: 'JARVIS',
         text: data.response,
         timestamp: new Date(),
       }
 
+      // Mostrar respuesta de Jarvis
       onSendMessage(jarvisMessage)
 
     } catch (error) {
-      console.error("Error enviando mensaje:", error)
+      console.error('Error enviando mensaje:', error)
     }
   }
 
   const sender = (send: Message['sender']) => {
-    if (send === "JARVIS") {
-      return "message assistant-message message-author"
+    if (send === 'JARVIS') {
+      return 'message assistant-message message-author'
     }
 
-    return "message user-message message-author"
+    return 'message user-message message-author'
   }
 
   return (
     <aside className="conversation-panel">
+
       <div className="panel-header">
         <span>CONVERSATION</span>
         <span className="panel-line" />
       </div>
 
       <div className="conversation-messages">
+
         {messages.map((message) => (
           <div
             key={message.id}
             className={`message ${message.sender.toLowerCase()}-message`}
           >
+
             <span className={sender(message.sender)}>
               {message.sender}
             </span>
@@ -89,13 +94,16 @@ function ConversationPanel({
                 minute: '2-digit',
               })}
             </span>
+
           </div>
         ))}
 
         <div ref={messagesEndRef} />
+
       </div>
 
       <div className="conversation-input">
+
         <FiMessageSquare />
 
         <input
@@ -104,7 +112,7 @@ function ConversationPanel({
           value={input}
           onChange={(event) => setInput(event.target.value)}
           onKeyDown={(event) => {
-            if (event.key === "Enter") {
+            if (event.key === 'Enter') {
               handleSend()
             }
           }}
@@ -116,7 +124,9 @@ function ConversationPanel({
         >
           <FiSend />
         </button>
+
       </div>
+
     </aside>
   )
 }
