@@ -1,14 +1,14 @@
-from backend.commands.registry  import CommandResult
-from config             import APPLICATIONS
-    
+from backend.commands.registry import CommandResult
+from config import APPLICATIONS
+
 
 class ApplicationCommands:
 
     def __init__(self, system):
         self.system = system
 
-    def open(self, application):
-        path = APPLICATIONS.get(application)
+    def open(self, name):
+        path = APPLICATIONS.get(name)
 
         if path is None:
             return CommandResult(
@@ -21,5 +21,10 @@ class ApplicationCommands:
         if success:
             return CommandResult(
                 True,
-                f"Abriendo {application}."
+                f"Abriendo {name}."
             )
+
+        return CommandResult(
+            False,
+            f"No pude abrir {name}."
+        )

@@ -140,15 +140,19 @@ class Intent:
         if "chrome" in words or "navegador" in words:
             return {
                 "type": "command",
-                "name": "open_chrome",
-                "args": {}
+                "name": "open_application",
+                "args": {
+                    "name": "chrome"
+                }
             }
 
         if "steam" in words or "juego" in words:
             return {
                 "type": "command",
-                "name": "open_steam",
-                "args": {}
+                "name": "open_application",
+                "args": {
+                    "name": "steam"
+                }
             }
 
         return None

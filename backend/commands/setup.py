@@ -8,13 +8,8 @@ def register_commands(registry, system):
     system_info = SystemInfoCommands()
 
     registry.register(
-        "open_chrome",
-        lambda: applications.open("chrome")
-    )
-
-    registry.register(
-        "open_steam",
-        lambda: applications.open("steam")
+        "open_application",
+        applications.open
     )
 
     registry.register(
