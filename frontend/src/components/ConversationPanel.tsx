@@ -70,10 +70,16 @@ function ConversationPanel({
     <aside className="conversation-panel">
 
       <div className="panel-header">
-        <span>CONVERSATION</span>
-        <span className="panel-line" />
-      </div>
+        <div className="panel-title">
+          <FiMessageSquare />
+          <span>JARVIS CHAT</span>
+        </div>
 
+        <div className="chat-status">
+          <span className="status-dot" />
+          AVAILABLE
+        </div>
+      </div>
       <div className="conversation-messages">
 
         {messages.map((message) => (

@@ -24,13 +24,12 @@ function Header({ status }: HeaderProps) {
 
       <div
         className={`system-status ${status.toLowerCase()}`}
-        title={
+        title={ 
           status === 'ONLINE'
             ? 'Voice activo. Jarvis está escuchando.'
             : 'Voice inactivo. Di "Jarvis" para activarlo.'
         }
       >
-        <FiWifi className="status-icon" />
         <span className="status-dot" />
         {status}
       </div>
