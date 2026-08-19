@@ -40,7 +40,6 @@ class Assistant:
 
     def set_state(self, state):
         self.state = state
-        print(f"[STATE] {state}")
         event_queue.put({
             "type": "STATE_CHANGED",
             "state": state

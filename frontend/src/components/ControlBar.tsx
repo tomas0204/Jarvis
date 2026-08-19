@@ -13,12 +13,12 @@ interface ControlBarProps {
   onStateChange: (state: JarvisState) => void
 }
 
-function ControlBar({ state, onStateChange }: ControlBarProps) {
+function ControlBar({ state }: ControlBarProps) {
   return (
     <footer className="control-bar">
       <button
         className={`control-button ${state === 'LISTENING' ? 'active' : ''}`}
-        onClick={() => onStateChange('LISTENING')}
+        // onClick={() => onStateChange('LISTENING')}
       >
         <FiMic />
         <span>MICROPHONE</span>
@@ -26,7 +26,7 @@ function ControlBar({ state, onStateChange }: ControlBarProps) {
 
       <button
         className={`control-button ${state === 'PROCESSING' ? 'active' : ''}`}
-        onClick={() => onStateChange('PROCESSING')}
+        // onClick={() => onStateChange('PROCESSING')}
       >
         <FiCommand />
         <span>PROCESSING</span>
@@ -34,7 +34,7 @@ function ControlBar({ state, onStateChange }: ControlBarProps) {
 
       <button
         className={`control-button ${state === 'SPEAKING' ? 'active' : ''}`}
-        onClick={() => onStateChange('SPEAKING')}
+        // onClick={() => onStateChange('SPEAKING')}
       >
         <FiVolume2 />
         <span>SPEAKING</span>
@@ -42,7 +42,7 @@ function ControlBar({ state, onStateChange }: ControlBarProps) {
 
       <button
         className={`control-button ${state === 'IDLE' ? 'active' : ''}`}
-        onClick={() => onStateChange('IDLE')}
+        // onClick={() => onStateChange('IDLE')}
       >
         <FiCamera />
         <span>IDLE</span>

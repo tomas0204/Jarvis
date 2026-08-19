@@ -29,8 +29,13 @@ function Dashboard() {
     const unsubscribe =
       jarvisService.subscribe((event) => {
 
-        // Estos eventos solamente vienen
-        // del backend por WebSocket.
+        if (event.type === 'STATE_CHANGED') {
+          
+          console.log('Estado de Jarvis:', event.state)
+          setJarvisState(event.state)
+
+        }
+
         if (event.type === 'USER_MESSAGE') {
 
           setMessages((currentMessages) => [
@@ -103,7 +108,7 @@ function Dashboard() {
 
       <ControlBar
         state={jarvisState}
-        onStateChange={setJarvisState}
+        // onStateChange={setJarvisState}
       />
 
     </main>
