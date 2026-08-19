@@ -1,4 +1,4 @@
-import { FiSettings, FiWifi } from 'react-icons/fi'
+import { FiSettings } from 'react-icons/fi'
 import useCurrentTime from '../hooks/useCurrentTime'
 import './styles/Header.css'
 import type { JarvisStatus } from '../types/jarvis'

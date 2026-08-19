@@ -71,12 +71,13 @@ class Assistant:
 
         return self.stt.transcribe(audio)
 
-    def speak(self, text):
+    def speak(self, text, source="voice"):
         self.set_state("SPEAKING")
 
         self.tts.speak(text)
 
-        emit_jarvis_message(text)
+        if source == "voice":
+            emit_jarvis_message(text)
 
         self.set_state("IDLE")
 
