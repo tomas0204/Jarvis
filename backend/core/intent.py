@@ -26,18 +26,17 @@ class Intent:
         "okay jarvis",
         "jarvis",
         "eu jarvis",
-        "che jarvis"
+        "che jarvis",
         "jarvis activate"
     ]
 
     def is_wake_word(self, text):
-        text = text.lower().strip()
+        text = self._normalize_wake_word(text)
 
-        # Normalizamos algunas variantes comunes
-        text = text.replace(",", "")
-        text = text.replace(".", "")
-
-        return text in self.WAKE_WORDS
+        return any(
+            wake_word in text
+            for wake_word in self.WAKE_WORDS
+        )
 
     def detect(self, text):
         text = self._normalize(text)
@@ -187,3 +186,11 @@ class Intent:
             words.pop(0)
 
         return " ".join(words)
+
+    def _normalize_wake_word(self, text):
+        text = text.lower().strip()
+
+        for char in ",.!?¿¡":
+            text = text.replace(char, "")
+
+        return " ".join(text.split())
