@@ -8,7 +8,7 @@ import ControlBar from '../components/ControlBar'
 
 import { jarvisService } from '../services/jarvis'
 
-import type { JarvisState, Message } from '../types/jarvis'
+import type { JarvisState, Message, JarvisStatus } from '../types/jarvis'
 
 import './Dashboard.css'
 
@@ -20,6 +20,9 @@ function Dashboard() {
 
   const [messages, setMessages] =
     useState<Message[]>([])
+
+  
+  const [status, setStatus] = useState<JarvisStatus>('OFFLINE')
 
 
   useEffect(() => {
@@ -34,6 +37,10 @@ function Dashboard() {
           console.log('Estado de Jarvis:', event.state)
           setJarvisState(event.state)
 
+        }
+        
+        if (event.type === "JARVIS_STATUS"){
+              setStatus(event.status)
         }
 
         if (event.type === 'USER_MESSAGE') {
@@ -89,7 +96,7 @@ function Dashboard() {
   return (
     <main className="dashboard">
 
-      <Header />
+      <Header status={status}/>
 
       <section className="dashboard-content">
 
@@ -108,7 +115,7 @@ function Dashboard() {
 
       <ControlBar
         state={jarvisState}
-        // onStateChange={setJarvisState}
+        onStateChange={setJarvisState}
       />
 
     </main>

@@ -127,3 +127,29 @@
     transform: translateY(0);
   }
 }
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.chat-status .status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}

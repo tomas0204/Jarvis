@@ -25,8 +25,6 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #00d9ff;
-  box-shadow: 0 0 10px #00d9ff;
 }
 
 .topbar-right {
@@ -55,4 +53,13 @@
 
 .icon-button:hover {
   color: #00d9ff;
+}
+.system-status.online .status-dot {
+  background-color: #00d9ff;
+  box-shadow: 0 0 10px #00d9ff;
+}
+
+.system-status.offline .status-dot {
+  background-color: #ff3b3b;
+  box-shadow: 0 0 10px #ff3b3b;
 }

@@ -32,18 +32,18 @@ class JarvisService {
     }
 
     this.socket.onmessage = (event) => {
-        const data = JSON.parse(event.data)
+      const data = JSON.parse(event.data) as JarvisEvent
+      console.log("DATA:", data)
+      if (
+        data.type === 'USER_MESSAGE' ||
+        data.type === 'JARVIS_MESSAGE'
+      ) {
+        data.message.timestamp = new Date(
+          data.message.timestamp
+        )
+      }
 
-        if (
-            data.type === 'USER_MESSAGE' ||
-            data.type === 'JARVIS_MESSAGE'
-        ) {
-            data.message.timestamp = new Date(
-            data.message.timestamp
-            )
-        }
-
-        this.emit(data)
+      this.emit(data)
     }
 
     this.socket.onclose = () => {
@@ -74,8 +74,6 @@ class JarvisService {
         }),
       }
     )
-
-    console.log("MESSAGE: " + {response})
 
     if (!response.ok) {
       throw new Error('Error comunicándose con Jarvis')
