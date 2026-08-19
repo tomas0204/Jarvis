@@ -20,7 +20,7 @@ TTS_VOLUME = 1.0
 
 TTS_VOICE = "Sabina"
 
-LLM_MODEL = "llama-3.3-70b-versatile"
+LLM_MODEL = "openai/gpt-oss-20b"
 
 LLM_SYSTEM_PROMPT = """
 Eres JARVIS, un asistente virtual inteligente servicial.

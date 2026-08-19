@@ -2,10 +2,11 @@ import "./styles/ConversationPanel.css"
 import { FiMessageSquare, FiSend } from 'react-icons/fi'
 import type { Message } from "../types/jarvis"
 import { useState, useRef, useEffect } from "react"
+import { jarvisService } from "../services/jarvis"
 
 interface ConversationPanelProps {
   messages: Message[]
-  onSendMessage: (text: string) => void
+  onSendMessage: (message: Message) => void
 }
 
 function ConversationPanel({
@@ -22,35 +23,65 @@ function ConversationPanel({
     })
   }, [messages])
 
-  const handleSend = () => {
-    if (!input.trim()) return
+  const handleSend = async () => {
+    const text = input.trim()
 
-    onSendMessage(input.trim())
+    if (!text) return
 
     setInput('')
+
+    const userMessage: Message = {
+      id: Date.now(),
+      sender: 'USER',
+      text,
+      timestamp: new Date(),
+    }
+
+    // Mostrar mensaje del usuario
+    onSendMessage(userMessage)
+
+    try {
+      const data = await jarvisService.sendMessage(text)
+
+      const jarvisMessage: Message = {
+        id: Date.now() + 1,
+        sender: 'JARVIS',
+        text: data.response,
+        timestamp: new Date(),
+      }
+
+      // Mostrar respuesta de Jarvis
+      onSendMessage(jarvisMessage)
+
+    } catch (error) {
+      console.error('Error enviando mensaje:', error)
+    }
   }
 
   const sender = (send: Message['sender']) => {
-    if (send === "JARVIS") {
-      return "message assistant-message message-author"
+    if (send === 'JARVIS') {
+      return 'message assistant-message message-author'
     }
 
-    return "message user-message message-author"
+    return 'message user-message message-author'
   }
 
   return (
     <aside className="conversation-panel">
+
       <div className="panel-header">
         <span>CONVERSATION</span>
         <span className="panel-line" />
       </div>
 
       <div className="conversation-messages">
+
         {messages.map((message) => (
           <div
             key={message.id}
             className={`message ${message.sender.toLowerCase()}-message`}
           >
+
             <span className={sender(message.sender)}>
               {message.sender}
             </span>
@@ -63,13 +94,16 @@ function ConversationPanel({
                 minute: '2-digit',
               })}
             </span>
+
           </div>
         ))}
 
         <div ref={messagesEndRef} />
+
       </div>
 
       <div className="conversation-input">
+
         <FiMessageSquare />
 
         <input
@@ -78,7 +112,7 @@ function ConversationPanel({
           value={input}
           onChange={(event) => setInput(event.target.value)}
           onKeyDown={(event) => {
-            if (event.key === "Enter") {
+            if (event.key === 'Enter') {
               handleSend()
             }
           }}
@@ -90,7 +124,9 @@ function ConversationPanel({
         >
           <FiSend />
         </button>
+
       </div>
+
     </aside>
   )
 }
