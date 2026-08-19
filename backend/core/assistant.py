@@ -36,6 +36,15 @@ class Assistant:
         self.llm = LLM()
         self.intent = Intent()
 
+        self.state = "IDLE"
+
+    def set_state(self, state):
+        self.state = state
+        event_queue.put({
+            "type": "STATE_CHANGED",
+            "state": state
+        })
+
     def listen(self):
         audio = self.stt.listen()
 
@@ -46,8 +55,9 @@ class Assistant:
 
     def process(self, text, source="voice"):
 
-        # Solo enviamos el mensaje por WebSocket si viene del micrófono.
         if source == "voice":
+            self.set_state("PROCESSING")
+
             event_queue.put({
                 "type": "USER_MESSAGE",
                 "message": create_message("USER", text)
@@ -59,13 +69,19 @@ class Assistant:
 
             response = "Hasta luego. ¡Que tengas un buen día!"
 
+            self.set_state("SPEAKING")
             self.tts.speak(response)
 
             if source == "voice":
                 event_queue.put({
                     "type": "JARVIS_MESSAGE",
-                    "message": create_message("JARVIS", response)
+                    "message": create_message(
+                        "JARVIS",
+                        response
+                    )
                 })
+
+                self.set_state("IDLE")
 
             return {
                 "type": "exit",
@@ -85,6 +101,7 @@ class Assistant:
                     "command": intent["name"]
                 })
 
+            self.set_state("SPEAKING")
             self.tts.speak(result.response)
 
             if source == "voice":
@@ -96,6 +113,8 @@ class Assistant:
                     )
                 })
 
+                self.set_state("IDLE")
+
             return {
                 "type": "command",
                 "response": result.response,
@@ -104,6 +123,7 @@ class Assistant:
 
         response = self.llm.ask(text)
 
+        self.set_state("SPEAKING")
         self.tts.speak(response)
 
         if source == "voice":
@@ -115,15 +135,21 @@ class Assistant:
                 )
             })
 
+            self.set_state("IDLE")
+
         return {
             "type": "conversation",
             "response": response
         }
 
     def run_once(self):
+
+        self.set_state("LISTENING")
+
         text = self.listen()
 
         if not text:
+            self.set_state("IDLE")
             return True
 
         result = self.process(

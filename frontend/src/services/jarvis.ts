@@ -75,6 +75,8 @@ class JarvisService {
       }
     )
 
+    console.log("MESSAGE: " + {response})
+
     if (!response.ok) {
       throw new Error('Error comunicándose con Jarvis')
     }

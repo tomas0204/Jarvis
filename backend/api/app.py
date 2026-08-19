@@ -33,6 +33,8 @@ async def broadcast_event(event: dict):
 async def event_listener():
     while True:
         event = await asyncio.to_thread(event_queue.get)
+        
+        print(f"[EVENT] {event}")
 
         await broadcast_event(event)
 
