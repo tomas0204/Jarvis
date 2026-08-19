@@ -27,6 +27,7 @@ class Intent:
         "jarvis",
         "eu jarvis",
         "che jarvis"
+        "jarvis activate"
     ]
 
     def is_wake_word(self, text):
@@ -41,7 +42,7 @@ class Intent:
     def detect(self, text):
         text = self._normalize(text)
         words = text.split()
-
+        print(f"TEXTO RECIBIDO: {text}")
         if text in ["salir", "terminar", "adiós", "adios", "chau", "chao", "desactivate", "desactivar", "apagate", "apagar"]:
             return {
                 "type": "exit",

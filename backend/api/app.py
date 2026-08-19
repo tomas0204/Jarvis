@@ -33,15 +33,11 @@ async def broadcast_event(event: dict):
 async def event_listener():
     while True:
         event = await asyncio.to_thread(event_queue.get)
-        
-        print(f"[EVENT] {event}")
 
         await broadcast_event(event)
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-
     voice_thread = Thread(
         target=assistant.run,
         daemon=True
@@ -49,9 +45,26 @@ async def lifespan(app: FastAPI):
 
     voice_thread.start()
 
-    asyncio.create_task(event_listener())
+    listener_task = asyncio.create_task(event_listener())
 
-    yield
+    try:
+        yield
+
+    finally:
+        print("Cerrando Jarvis...")
+
+        assistant.stop()
+
+        listener_task.cancel()
+
+        try:
+            await listener_task
+        except asyncio.CancelledError:
+            pass
+
+        voice_thread.join(timeout=2)
+
+        print("Jarvis detenido.")
 
 
 app = FastAPI(lifespan=lifespan)

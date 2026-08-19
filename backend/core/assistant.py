@@ -1,30 +1,40 @@
-from backend.commands.setup         import register_commands
-from backend.voice.speech_to_text   import SpeechToText
-from backend.voice.text_to_speech   import TextToSpeech
-from backend.ai.llm                 import LLM
-from backend.core.intent            import Intent
-from backend.commands.system        import SystemCommands
-from backend.commands.registry      import CommandRegistry
-from backend.core.event_bus         import event_queue
-from datetime                       import datetime
-import time
+from threading import Event
 
+from backend.commands.setup import register_commands
+from backend.voice.speech_to_text import SpeechToText
+from backend.voice.text_to_speech import TextToSpeech
+from backend.ai.llm import LLM
+from backend.core.intent import Intent
+from backend.commands.system import SystemCommands
+from backend.commands.registry import CommandRegistry
 
-def create_message(sender, text):
-    return {
-        "id": int(time.time() * 1000),
-        "sender": sender,
-        "text": text,
-        "timestamp": datetime.now().isoformat()
-    }
+from backend.core.event_bus import (
+    emit_state,
+    emit_status,
+    emit_command,
+    emit_user_message,
+    emit_jarvis_message
+)
 
 
 class Assistant:
 
     def __init__(self):
-        self.online = False
-        self.stt = SpeechToText()
+        # Control del thread principal
+        self.running = Event()
+        self.running.set()
 
+        # Estado de Jarvis
+        self.online = False
+        self.state = "IDLE"
+
+        # Servicios
+        self.stt = SpeechToText()
+        self.tts = TextToSpeech()
+        self.llm = LLM()
+        self.intent = Intent()
+
+        # Sistema de comandos
         self.system = SystemCommands()
         self.registry = CommandRegistry()
 
@@ -33,34 +43,25 @@ class Assistant:
             self.system
         )
 
-        self.tts = TextToSpeech()
-        self.llm = LLM()
-        self.intent = Intent()
+    # =========================
+    # ESTADO DE JARVIS
+    # =========================
 
-        self.state = "IDLE"
-    
     def activate(self):
         self.online = True
+        emit_status("ONLINE")
 
-        event_queue.put({
-            "type": "JARVIS_STATUS",
-            "status": "ONLINE"
-        })
-    
     def deactivate(self):
         self.online = False
-
-        event_queue.put({
-            "type": "JARVIS_STATUS",
-            "status": "OFFLINE"
-        })
+        emit_status("OFFLINE")
 
     def set_state(self, state):
         self.state = state
-        event_queue.put({
-            "type": "STATE_CHANGED",
-            "state": state
-        })
+        emit_state(state)
+
+    # =========================
+    # VOZ
+    # =========================
 
     def listen(self):
         audio = self.stt.listen()
@@ -70,96 +71,78 @@ class Assistant:
 
         return self.stt.transcribe(audio)
 
+    def speak(self, text):
+        self.set_state("SPEAKING")
+
+        self.tts.speak(text)
+
+        emit_jarvis_message(text)
+
+        self.set_state("IDLE")
+
+    # =========================
+    # PROCESAMIENTO
+    # =========================
+
     def process(self, text, source="voice"):
 
         if source == "voice":
             self.set_state("PROCESSING")
-
-            event_queue.put({
-                "type": "USER_MESSAGE",
-                "message": create_message("USER", text)
-            })
+            emit_user_message(text)
 
         intent = self.intent.detect(text)
 
         if intent["type"] == "exit":
-
-            self.deactivate()
-
-            response = "De acuerdo. Estaré esperando."
-
-            self.set_state("SPEAKING")
-            self.tts.speak(response)
-
-            if source == "voice":
-                event_queue.put({
-                    "type": "JARVIS_MESSAGE",
-                    "message": create_message(
-                        "JARVIS",
-                        response
-                    )
-                })
-
-            self.set_state("IDLE")
-
-            return {
-                "type": "deactivate",
-                "response": response
-            }
+            return self._handle_exit()
 
         if intent["type"] == "command":
+            return self._handle_command(intent)
 
-            result = self.registry.execute(
-                intent["name"],
-                intent.get("args", {})
-            )
+        return self._handle_conversation(text)
 
-            if source == "voice":
-                event_queue.put({
-                    "type": "COMMAND_EXECUTED",
-                    "command": intent["name"]
-                })
+    def _handle_exit(self):
+        self.deactivate()
 
-            self.set_state("SPEAKING")
-            self.tts.speak(result.response)
+        response = "De acuerdo. Estaré esperando."
 
-            if source == "voice":
-                event_queue.put({
-                    "type": "JARVIS_MESSAGE",
-                    "message": create_message(
-                        "JARVIS",
-                        result.response
-                    )
-                })
+        self.speak(response)
 
-                self.set_state("IDLE")
+        return {
+            "type": "deactivate",
+            "response": response
+        }
 
-            return {
-                "type": "command",
-                "response": result.response,
-                "command": intent["name"]
-            }
+    def _handle_command(self, intent):
+        result = self.registry.execute(
+            intent["name"],
+            intent.get("args", {})
+        )
 
+        emit_command(intent["name"])
+
+        response = result.response
+
+        self.speak(response)
+
+        return {
+            "type": "command",
+            "response": response,
+            "command": intent["name"]
+        }
+
+    def _handle_conversation(self, text):
         response = self.llm.ask(text)
 
-        self.set_state("SPEAKING")
-        self.tts.speak(response)
-
-        if source == "voice":
-            event_queue.put({
-                "type": "JARVIS_MESSAGE",
-                "message": create_message(
-                    "JARVIS",
-                    response
-                )
-            })
-
-            self.set_state("IDLE")
+        self.speak(response)
 
         return {
             "type": "conversation",
             "response": response
         }
+
+    # =========================
+    # CICLO DE VOZ
+    # =========================
 
     def run_once(self):
 
@@ -167,47 +150,50 @@ class Assistant:
 
         text = self.listen()
 
+        # El thread fue detenido mientras escuchaba
+        if not self.running.is_set():
+            self.set_state("IDLE")
+            return
+
         if not text:
             self.set_state("IDLE")
-            return True
+            return
 
-        # Jarvis está apagado: solamente busca la wake word
+        # Jarvis está apagado:
+        # solamente busca la wake word
         if not self.online:
+            self._handle_wake_word(text)
+            return
 
-            if self.intent.is_wake_word(text):
-
-                self.activate()
-
-                self.set_state("SPEAKING")
-
-                response = "Sí, te escucho."
-
-                self.tts.speak(response)
-
-                event_queue.put({
-                    "type": "JARVIS_MESSAGE",
-                    "message": create_message(
-                        "JARVIS",
-                        response
-                    )
-                })
-
-                self.set_state("IDLE")
-
-            else:
-                self.set_state("IDLE")
-
-            return True
-
-        result = self.process(
+        self.process(
             text,
             source="voice"
         )
 
-        return True and result
+    def _handle_wake_word(self, text):
+
+        if not self.intent.is_wake_word(text):
+            self.set_state("IDLE")
+            return
+
+        self.activate()
+
+        self.speak(
+            "Sí, te escucho."
+        )
+
+    # =========================
+    # CONTROL DEL THREAD
+    # =========================
+
+    def stop(self):
+        print("Deteniendo Assistant...")
+        self.running.clear()
 
     def run(self):
+
         self.stt.calibrate()
 
-        while self.run_once():
-            pass
+        while self.running.is_set():
+            self.run_once()
+
