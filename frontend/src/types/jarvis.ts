@@ -4,6 +4,12 @@ export type JarvisState =
   | 'PROCESSING'
   | 'SPEAKING'
 
+
+export type JarvisStatus =
+  | 'ONLINE'
+  | 'OFFLINE'
+
+
 export interface Message {
   id: number
   sender: 'JARVIS' | 'USER'
@@ -11,10 +17,15 @@ export interface Message {
   timestamp: Date
 }
 
+
 export type JarvisEvent =
   | {
       type: 'STATE_CHANGED'
       state: JarvisState
+    }
+  | {
+      type: 'JARVIS_STATUS'
+      status: JarvisStatus
     }
   | {
       type: 'USER_MESSAGE'

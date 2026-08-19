@@ -17,11 +17,31 @@ OPEN_WORDS = [
 
 
 class Intent:
+    
+    WAKE_WORDS = [
+        "hey jarvis",
+        "hola jarvis",
+        "oye jarvis",
+        "ok jarvis",
+        "okay jarvis",
+        "jarvis",
+        "eu jarvis",
+        "che jarvis",
+        "jarvis activate"
+    ]
+
+    def is_wake_word(self, text):
+        text = self._normalize_wake_word(text)
+
+        return any(
+            wake_word in text
+            for wake_word in self.WAKE_WORDS
+        )
 
     def detect(self, text):
         text = self._normalize(text)
         words = text.split()
-
+        print(f"TEXTO RECIBIDO: {text}")
         if text in ["salir", "terminar", "adiós", "adios", "chau", "chao", "desactivate", "desactivar", "apagate", "apagar"]:
             return {
                 "type": "exit",
@@ -166,3 +186,11 @@ class Intent:
             words.pop(0)
 
         return " ".join(words)
+
+    def _normalize_wake_word(self, text):
+        text = text.lower().strip()
+
+        for char in ",.!?¿¡":
+            text = text.replace(char, "")
+
+        return " ".join(text.split())
