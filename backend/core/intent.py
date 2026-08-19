@@ -17,6 +17,26 @@ OPEN_WORDS = [
 
 
 class Intent:
+    
+    WAKE_WORDS = [
+        "hey jarvis",
+        "hola jarvis",
+        "oye jarvis",
+        "ok jarvis",
+        "okay jarvis",
+        "jarvis",
+        "eu jarvis",
+        "che jarvis"
+    ]
+
+    def is_wake_word(self, text):
+        text = text.lower().strip()
+
+        # Normalizamos algunas variantes comunes
+        text = text.replace(",", "")
+        text = text.replace(".", "")
+
+        return text in self.WAKE_WORDS
 
     def detect(self, text):
         text = self._normalize(text)

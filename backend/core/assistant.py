@@ -22,6 +22,7 @@ def create_message(sender, text):
 class Assistant:
 
     def __init__(self):
+        self.online = False
         self.stt = SpeechToText()
 
         self.system = SystemCommands()
@@ -37,6 +38,22 @@ class Assistant:
         self.intent = Intent()
 
         self.state = "IDLE"
+    
+    def activate(self):
+        self.online = True
+
+        event_queue.put({
+            "type": "JARVIS_STATUS",
+            "status": "ONLINE"
+        })
+    
+    def deactivate(self):
+        self.online = False
+
+        event_queue.put({
+            "type": "JARVIS_STATUS",
+            "status": "OFFLINE"
+        })
 
     def set_state(self, state):
         self.state = state
@@ -67,7 +84,9 @@ class Assistant:
 
         if intent["type"] == "exit":
 
-            response = "Hasta luego. ¡Que tengas un buen día!"
+            self.deactivate()
+
+            response = "De acuerdo. Estaré esperando."
 
             self.set_state("SPEAKING")
             self.tts.speak(response)
@@ -81,10 +100,10 @@ class Assistant:
                     )
                 })
 
-                self.set_state("IDLE")
+            self.set_state("IDLE")
 
             return {
-                "type": "exit",
+                "type": "deactivate",
                 "response": response
             }
 
@@ -152,12 +171,40 @@ class Assistant:
             self.set_state("IDLE")
             return True
 
+        # Jarvis está apagado: solamente busca la wake word
+        if not self.online:
+
+            if self.intent.is_wake_word(text):
+
+                self.activate()
+
+                self.set_state("SPEAKING")
+
+                response = "Sí, te escucho."
+
+                self.tts.speak(response)
+
+                event_queue.put({
+                    "type": "JARVIS_MESSAGE",
+                    "message": create_message(
+                        "JARVIS",
+                        response
+                    )
+                })
+
+                self.set_state("IDLE")
+
+            else:
+                self.set_state("IDLE")
+
+            return True
+
         result = self.process(
             text,
             source="voice"
         )
 
-        return result["type"] != "exit"
+        return True and result
 
     def run(self):
         self.stt.calibrate()
