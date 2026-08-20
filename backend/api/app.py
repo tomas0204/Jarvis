@@ -1,17 +1,16 @@
 import asyncio
-
-from contextlib import asynccontextmanager
-from threading import Thread
-
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
-
-from backend.core.assistant import Assistant
-from backend.core.event_bus import event_queue
+from contextlib                 import asynccontextmanager
+from threading                  import Thread
+from fastapi                    import FastAPI, WebSocket, WebSocketDisconnect
+from pydantic                   import BaseModel
+from fastapi.middleware.cors    import CORSMiddleware
+from backend.core.assistant     import Assistant
+from backend.core.event_bus     import event_queue
+from backend.commands.monitor   import SystemMonitor
 
 
 assistant = Assistant()
+system_monitor = SystemMonitor()
 connected_clients: list[WebSocket] = []
 
 
@@ -94,6 +93,14 @@ def send_message(message: MessageRequest):
         message.text,
         source="web"
     )
+@app.get("/api/system")
+def get_system_info():
+    return {
+        "cpu": system_monitor.get_cpu_usage(),
+        "memory": system_monitor.get_memory_usage(),
+        "uptime": system_monitor.get_uptime(),
+    }
+
 @app.websocket("/ws/jarvis")
 async def websocket_endpoint(websocket: WebSocket):
 
