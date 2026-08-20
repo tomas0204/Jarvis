@@ -15,13 +15,20 @@ import {
 function SystemPanel() {
   const [systemInfo, setSystemInfo] = useState<SystemInfo | null>(null)
   useEffect(() => {
-
     const updateSystemInfo = async () => {
       try {
         const data = await systemService.getSystemInfo()
-        setSystemInfo(data)
+
+        setSystemInfo(current => ({
+          cpu: data.cpu,
+          memory: data.memory,
+          uptime: current?.uptime ?? data.uptime,
+        }))
       } catch (error) {
-        console.error('Error obteniendo información del sistema:', error)
+        console.error(
+          'Error obteniendo información del sistema:',
+          error
+        )
       }
     }
 
@@ -32,8 +39,46 @@ function SystemPanel() {
     return () => {
       clearInterval(interval)
     }
-
   }, [])
+
+  useEffect(() => {
+    if (!systemInfo) return
+
+    const interval = setInterval(() => {
+      setSystemInfo(current => {
+        if (!current) return current
+
+        const [hours, minutes, seconds] = current.uptime
+          .split(':')
+          .map(Number)
+
+        let totalSeconds =
+          hours * 3600 +
+          minutes * 60 +
+          seconds +
+          1
+
+        const newHours = Math.floor(totalSeconds / 3600)
+
+        totalSeconds %= 3600
+
+        const newMinutes = Math.floor(totalSeconds / 60)
+
+        const newSeconds = totalSeconds % 60
+
+        return {
+          ...current,
+          uptime: `${String(newHours).padStart(2, '0')}:${String(
+            newMinutes
+          ).padStart(2, '0')}:${String(newSeconds).padStart(2, '0')}`,
+        }
+      })
+    }, 1000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [systemInfo === null])
   return (
     <aside className="system-panel">
       <div className="panel-header">
