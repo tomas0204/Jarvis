@@ -6,8 +6,34 @@ import {
   FiCloud,
   FiCamera,
 } from 'react-icons/fi'
+import { useEffect, useState } from 'react'
+import {
+          systemService,
+          type SystemInfo,
+        } from '../services/systemService'
 
 function SystemPanel() {
+  const [systemInfo, setSystemInfo] = useState<SystemInfo | null>(null)
+  useEffect(() => {
+
+    const updateSystemInfo = async () => {
+      try {
+        const data = await systemService.getSystemInfo()
+        setSystemInfo(data)
+      } catch (error) {
+        console.error('Error obteniendo información del sistema:', error)
+      }
+    }
+
+    updateSystemInfo()
+
+    const interval = setInterval(updateSystemInfo, 5000)
+
+    return () => {
+      clearInterval(interval)
+    }
+
+  }, [])
   return (
     <aside className="system-panel">
       <div className="panel-header">
@@ -20,7 +46,7 @@ function SystemPanel() {
           <FiCpu />
           <div>
             <span className="stat-label">CPU</span>
-            <strong>24%</strong>
+            {systemInfo ? `${systemInfo.cpu}%` : '--'}
           </div>
         </div>
 
@@ -28,7 +54,7 @@ function SystemPanel() {
           <FiHardDrive />
           <div>
             <span className="stat-label">MEMORY</span>
-            <strong>41%</strong>
+            {systemInfo ? `${systemInfo.memory}%` : '--'}
           </div>
         </div>
 
@@ -36,7 +62,7 @@ function SystemPanel() {
           <FiClock />
           <div>
             <span className="stat-label">UPTIME</span>
-            <strong>02:41:18</strong>
+            {systemInfo ? `${systemInfo.uptime}` : '--:--:--'}
           </div>
         </div>
       </div>
