@@ -3,6 +3,9 @@
    ========================================================= */
 
 .core-panel {
+  --core-color: #00d9ff;
+  --core-rgb: 0, 217, 255;
+
   position: relative;
   display: flex;
   align-items: center;
@@ -12,14 +15,13 @@
   background:
     radial-gradient(
       circle at center,
-      rgba(0, 217, 255, 0.08) 0%,
+      rgba(var(--core-rgb), 0.08) 0%,
       rgba(3, 9, 15, 0) 50%
     ),
     rgba(3, 9, 15, 0.94);
 
   overflow: hidden;
 }
-
 
 /* =========================================================
    CORE CONTAINER
@@ -124,29 +126,27 @@
 
 .core-radial span {
   position: absolute;
-
   width: 2px;
   height: 14px;
-
   left: 50%;
   top: 50%;
 
-  background: rgba(0, 217, 255, 0.45);
+  background: var(--core-color);
 
   box-shadow:
-    0 0 8px rgba(0, 217, 255, 0.4);
+    0 0 8px rgba(var(--core-rgb), 0.4);
 
   transform-origin: center 180px;
 
-  /*
-   * Animación única y permanente.
-   */
   animation:
     radial-blink 2.5s ease-in-out infinite;
 
+  pointer-events: none;
+
   transition:
     opacity 250ms ease,
-    box-shadow 250ms ease;
+    box-shadow 250ms ease,
+    background 350ms ease;
 }
 
 
@@ -188,50 +188,25 @@
 }
 
 
-.core-radial span:nth-child(2),
-.core-radial span:nth-child(6) {
-  animation-delay: 0.4s;
-}
-
-.core-radial span:nth-child(3),
-.core-radial span:nth-child(7) {
-  animation-delay: 0.8s;
-}
-
-.core-radial span:nth-child(4),
-.core-radial span:nth-child(8) {
-  animation-delay: 1.2s;
-}
-
-
 /* =========================================================
    ORBITS
    ========================================================= */
 
 .core-orbit {
   position: absolute;
-
   width: 100%;
   height: 100%;
-
   top: 0;
   left: 0;
-
   border-radius: 50%;
-
   pointer-events: none;
 
-  /*
-   * La animación nunca cambia de nombre.
-   * Solo cambia la duración.
-   */
   animation:
     orbit-rotate 12s linear infinite;
 
   transition:
     filter 350ms ease;
 }
-
 
 .core-orbit:nth-of-type(4) {
   transform: scale(0.82);
@@ -376,14 +351,13 @@
   top: 27%;
   right: 27%;
 
-  transform: rotate(65deg);
+  transform: rotate(45deg);
 }
 
 
 .core-orbit span:nth-child(11) {
   bottom: 27%;
   right: 27%;
-
   transform: rotate(115deg);
 }
 
@@ -392,7 +366,7 @@
   bottom: 27%;
   left: 27%;
 
-  transform: rotate(155deg);
+  transform: rotate(45deg);
 }
 
 
@@ -423,29 +397,25 @@
   width: 340px;
   height: 340px;
 
-  border: 1px solid rgba(0, 217, 255, 0.18);
+  border: 1px solid rgba(var(--core-rgb), 0.18);
 
   background:
     conic-gradient(
       from 0deg,
       transparent 0deg,
-      rgba(0, 217, 255, 0.8) 8deg,
+      rgba(var(--core-rgb), 0.8) 8deg,
       transparent 18deg,
-
       transparent 55deg,
-      rgba(0, 217, 255, 0.35) 65deg,
+      rgba(var(--core-rgb), 0.35) 65deg,
       transparent 78deg,
-
       transparent 145deg,
-      rgba(0, 217, 255, 0.6) 155deg,
+      rgba(var(--core-rgb), 0.6) 155deg,
       transparent 170deg,
-
       transparent 240deg,
-      rgba(0, 217, 255, 0.4) 250deg,
+      rgba(var(--core-rgb), 0.4) 250deg,
       transparent 265deg,
-
       transparent 330deg,
-      rgba(0, 217, 255, 0.7) 340deg,
+      rgba(var(--core-rgb), 0.7) 340deg,
       transparent 350deg
     );
 
@@ -469,7 +439,6 @@
     rotate-clockwise 20s linear infinite;
 }
 
-
 /* =========================================================
    MIDDLE RING
    ========================================================= */
@@ -478,11 +447,11 @@
   width: 270px;
   height: 270px;
 
-  border: 1px solid rgba(0, 217, 255, 0.28);
+  border: 1px solid rgba(var(--core-rgb), 0.28);
 
   box-shadow:
-    0 0 15px rgba(0, 217, 255, 0.04),
-    inset 0 0 15px rgba(0, 217, 255, 0.03);
+    0 0 15px rgba(var(--core-rgb), 0.04),
+    inset 0 0 15px rgba(var(--core-rgb), 0.03);
 
   animation:
     rotate-counter-clockwise 12s linear infinite;
@@ -506,17 +475,14 @@
 
 .core-ring-middle::before {
   inset: -8px;
-
-  border-top-color: rgba(0, 217, 255, 0.65);
-  border-bottom-color: rgba(0, 217, 255, 0.2);
+  border-top-color: rgba(var(--core-rgb), 0.65);
+  border-bottom-color: rgba(var(--core-rgb), 0.2);
 }
-
 
 .core-ring-middle::after {
   inset: 8px;
-
-  border-left-color: rgba(0, 217, 255, 0.4);
-  border-right-color: rgba(0, 217, 255, 0.15);
+  border-left-color: rgba(var(--core-rgb), 0.4);
+  border-right-color: rgba(var(--core-rgb), 0.15);
 }
 
 
@@ -528,16 +494,16 @@
   width: 190px;
   height: 190px;
 
-  border: 1px solid rgba(0, 217, 255, 0.5);
+  border: 1px solid rgba(var(--core-rgb), 0.5);
 
   box-shadow:
-    0 0 25px rgba(0, 217, 255, 0.08),
-    inset 0 0 25px rgba(0, 217, 255, 0.08);
+    0 0 25px rgba(var(--core-rgb), 0.08),
+    inset 0 0 25px rgba(var(--core-rgb), 0.08);
 
   background:
     radial-gradient(
       circle,
-      rgba(0, 217, 255, 0.05) 0%,
+      rgba(var(--core-rgb), 0.05) 0%,
       transparent 65%
     );
 
@@ -552,26 +518,24 @@
 
 .core-center {
   position: absolute;
-
   width: 105px;
   height: 105px;
-
   border-radius: 50%;
 
   background:
     radial-gradient(
       circle,
-      rgba(0, 217, 255, 0.16) 0%,
-      rgba(0, 217, 255, 0.07) 45%,
-      rgba(0, 217, 255, 0.02) 70%,
+      rgba(var(--core-rgb), 0.16) 0%,
+      rgba(var(--core-rgb), 0.07) 45%,
+      rgba(var(--core-rgb), 0.02) 70%,
       transparent 100%
     );
 
-  border: 1px solid rgba(0, 217, 255, 0.45);
+  border: 1px solid rgba(var(--core-rgb), 0.45);
 
   box-shadow:
-    0 0 30px rgba(0, 217, 255, 0.15),
-    inset 0 0 20px rgba(0, 217, 255, 0.08);
+    0 0 30px rgba(var(--core-rgb), 0.15),
+    inset 0 0 20px rgba(var(--core-rgb), 0.08);
 
   animation:
     center-pulse 3s ease-in-out infinite;
@@ -590,10 +554,24 @@
    ========================================================= */
 
 .state-idle {
-  --state-speed: 1;
-  --state-pulse: 1;
+  --core-color: #00d9ff;
+  --core-rgb: 0, 217, 255;
 }
 
+.state-listening {
+  --core-color: #00ffc8;
+  --core-rgb: 0, 255, 200;
+}
+
+.state-processing {
+  --core-color: #a970ff;
+  --core-rgb: 169, 112, 255;
+}
+
+.state-speaking {
+  --core-color: #00aaff;
+  --core-rgb: 0, 170, 255;
+}
 
 /*
  * En vez de reemplazar animation-name,
@@ -639,7 +617,6 @@
   opacity: 0.85;
 }
 
-
 .state-listening .core-ring-outer {
   animation-duration: 8s;
 
@@ -648,15 +625,15 @@
       from 0deg,
       transparent 0deg,
       transparent 250deg,
-      rgba(0, 217, 255, 0.05) 275deg,
-      rgba(0, 217, 255, 0.9) 290deg,
-      rgba(0, 217, 255, 0.25) 305deg,
+      rgba(var(--core-rgb), 0.05) 275deg,
+      rgba(var(--core-rgb), 0.9) 290deg,
+      rgba(var(--core-rgb), 0.25) 305deg,
       transparent 325deg,
       transparent 360deg
     );
 
   box-shadow:
-    0 0 20px rgba(0, 217, 255, 0.08);
+    0 0 20px rgba(var(--core-rgb), 0.08);
 }
 
 
@@ -706,17 +683,14 @@
 }
 
 
-.state-processing .jarvis-core::before {
-  opacity: 1;
+.state-processing .core-ring-middle::before {
+  border-top-color: rgba(var(--core-rgb), 0.95);
+  border-bottom-color: rgba(var(--core-rgb), 0.4);
 }
 
-
-.state-processing .jarvis-core::after {
-  border-color: rgba(0, 217, 255, 0.14);
-
-  box-shadow:
-    0 0 35px rgba(0, 217, 255, 0.1),
-    inset 0 0 40px rgba(0, 217, 255, 0.1);
+.state-processing .core-ring-middle::after {
+  border-left-color: rgba(var(--core-rgb), 0.7);
+  border-right-color: rgba(var(--core-rgb), 0.3);
 }
 
 
@@ -726,38 +700,37 @@
   background:
     conic-gradient(
       from 0deg,
-
       transparent 0deg,
-      rgba(0, 217, 255, 0.7) 8deg,
+      rgba(var(--core-rgb), 0.7) 8deg,
       transparent 18deg,
 
       transparent 35deg,
-      rgba(0, 217, 255, 0.35) 42deg,
+      rgba(var(--core-rgb), 0.35) 42deg,
       transparent 52deg,
 
       transparent 80deg,
-      rgba(0, 217, 255, 0.8) 90deg,
+      rgba(var(--core-rgb), 0.8) 90deg,
       transparent 105deg,
 
       transparent 145deg,
-      rgba(0, 217, 255, 0.6) 155deg,
+      rgba(var(--core-rgb), 0.6) 155deg,
       transparent 168deg,
 
       transparent 200deg,
-      rgba(0, 217, 255, 0.8) 212deg,
+      rgba(var(--core-rgb), 0.8) 212deg,
       transparent 225deg,
 
       transparent 260deg,
-      rgba(0, 217, 255, 0.45) 270deg,
+      rgba(var(--core-rgb), 0.45) 270deg,
       transparent 282deg,
 
       transparent 320deg,
-      rgba(0, 217, 255, 0.8) 330deg,
+      rgba(var(--core-rgb), 0.8) 330deg,
       transparent 345deg
     );
 
   box-shadow:
-    0 0 20px rgba(0, 217, 255, 0.08);
+    0 0 20px rgba(var(--core-rgb), 0.08);
 }
 
 
@@ -830,18 +803,18 @@
   background:
     radial-gradient(
       circle,
-      rgba(0, 217, 255, 0.22) 0%,
-      rgba(0, 217, 255, 0.09) 40%,
-      rgba(0, 217, 255, 0.02) 70%,
+      rgba(var(--core-rgb), 0.22) 0%,
+      rgba(var(--core-rgb), 0.09) 40%,
+      rgba(var(--core-rgb), 0.02) 70%,
       transparent 100%
     );
 
-  border-color: rgba(0, 217, 255, 0.65);
+  border-color: rgba(var(--core-rgb), 0.65);
 
   box-shadow:
-    0 0 35px rgba(0, 217, 255, 0.2),
-    0 0 70px rgba(0, 217, 255, 0.08),
-    inset 0 0 25px rgba(0, 217, 255, 0.12);
+    0 0 35px rgba(var(--core-rgb), 0.2),
+    0 0 70px rgba(var(--core-rgb), 0.08),
+    inset 0 0 25px rgba(var(--core-rgb), 0.12);
 
   animation-duration: 0.8s;
 }
@@ -862,12 +835,14 @@
 }
 
 
-.state-speaking .jarvis-core::after {
-  border-color: rgba(0, 217, 255, 0.14);
+.state-speaking .core-ring-middle::before {
+  border-top-color: rgba(var(--core-rgb), 0.8);
+  border-bottom-color: rgba(var(--core-rgb), 0.25);
+}
 
-  box-shadow:
-    0 0 35px rgba(0, 217, 255, 0.1),
-    inset 0 0 45px rgba(0, 217, 255, 0.08);
+.state-speaking .core-ring-middle::after {
+  border-left-color: rgba(var(--core-rgb), 0.55);
+  border-right-color: rgba(var(--core-rgb), 0.2);
 }
 
 
@@ -875,30 +850,29 @@
   background:
     conic-gradient(
       from 0deg,
-
       transparent 0deg,
-      rgba(0, 217, 255, 0.5) 15deg,
+      rgba(var(--core-rgb), 0.5) 15deg,
       transparent 30deg,
 
       transparent 70deg,
-      rgba(0, 217, 255, 0.75) 85deg,
+      rgba(var(--core-rgb), 0.75) 85deg,
       transparent 105deg,
 
       transparent 145deg,
-      rgba(0, 217, 255, 0.45) 160deg,
+      rgba(var(--core-rgb), 0.45) 160deg,
       transparent 180deg,
 
       transparent 220deg,
-      rgba(0, 217, 255, 0.75) 235deg,
+      rgba(var(--core-rgb), 0.75) 235deg,
       transparent 255deg,
 
       transparent 300deg,
-      rgba(0, 217, 255, 0.55) 315deg,
+      rgba(var(--core-rgb), 0.55) 315deg,
       transparent 335deg
     );
 
   box-shadow:
-    0 0 25px rgba(0, 217, 255, 0.1);
+    0 0 25px rgba(var(--core-rgb), 0.1);
 }
 
 
@@ -930,15 +904,14 @@
   background:
     radial-gradient(
       circle,
-      rgba(0, 217, 255, 0.25) 0%,
-      rgba(0, 217, 255, 0.1) 40%,
-      rgba(0, 217, 255, 0.03) 70%,
+      rgba(var(--core-rgb), 0.25) 0%,
+      rgba(var(--core-rgb), 0.1) 40%,
+      rgba(var(--core-rgb), 0.03) 70%,
       transparent 100%
     );
 
-  border-color: rgba(0, 217, 255, 0.7);
+  border-color: rgba(var(--core-rgb), 0.7);
 }
-
 
 .state-speaking .core-orbit {
   animation-duration: 5s;
@@ -1069,16 +1042,14 @@
   0%,
   100% {
     opacity: 0.25;
-
     box-shadow:
-      0 0 4px rgba(0, 217, 255, 0.2);
+      0 0 4px rgba(var(--core-rgb), 0.2);
   }
 
   50% {
     opacity: 1;
-
     box-shadow:
-      0 0 12px rgba(0, 217, 255, 0.8);
+      0 0 12px rgba(var(--core-rgb), 0.8);
   }
 }
 
@@ -1206,20 +1177,16 @@
   0%,
   100% {
     opacity: 0.25;
-
     height: 10px;
-
     box-shadow:
-      0 0 4px rgba(0, 217, 255, 0.2);
+      0 0 4px rgba(var(--core-rgb), 0.2);
   }
 
   50% {
     opacity: 1;
-
     height: 18px;
-
     box-shadow:
-      0 0 14px rgba(0, 217, 255, 0.9);
+      0 0 14px rgba(var(--core-rgb), 0.9);
   }
 }
 
@@ -1231,15 +1198,14 @@
 @keyframes processing-point {
   from {
     opacity: 0.35;
-    transform: scale(0.7);
+    filter: brightness(0.8);
   }
 
   to {
     opacity: 1;
-    transform: scale(1.35);
+    filter: brightness(1.8);
   }
 }
-
 
 @keyframes processing-segment {
   from {
@@ -1257,15 +1223,14 @@
 @keyframes processing-radial {
   from {
     opacity: 0.25;
-    transform: scaleY(0.65);
+    height: 10px;
   }
 
   to {
     opacity: 1;
-    transform: scaleY(1.4);
+    height: 20px;
   }
 }
-
 
 /* =========================================================
    SPEAKING ANIMATIONS
@@ -1294,15 +1259,14 @@
 @keyframes speaking-point {
   from {
     opacity: 0.35;
-    transform: scale(0.75);
+    filter: brightness(0.8);
   }
 
   to {
     opacity: 1;
-    transform: scale(1.4);
+    filter: brightness(1.7);
   }
 }
-
 
 @keyframes speaking-segment {
   from {
