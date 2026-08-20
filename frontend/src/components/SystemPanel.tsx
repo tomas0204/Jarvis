@@ -6,8 +6,103 @@ import {
   FiCloud,
   FiCamera,
 } from 'react-icons/fi'
+import { useEffect, useState } from 'react'
+import {
+  systemService,
+  type SystemInfo,
+  } from '../services/systemService'
+import { weatherService, type WeatherStats } from "../services/weatherService"
 
 function SystemPanel() {
+  const [systemInfo, setSystemInfo] = useState<SystemInfo | null>(null)
+  const [weatherStats, setWeatherStats] = useState<WeatherStats | null>(null)
+  useEffect(() => {
+    const updateSystemInfo = async () => {
+      try {
+        const data = await systemService.getSystemInfo()
+
+        setSystemInfo(current => ({
+          cpu: data.cpu,
+          memory: data.memory,
+          uptime: current?.uptime ?? data.uptime,
+        }))
+      } catch (error) {
+        console.error(
+          'Error obteniendo información del sistema:',
+          error
+        )
+      }
+    }
+
+    updateSystemInfo()
+
+    const interval = setInterval(updateSystemInfo, 5000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!systemInfo) return
+
+    const interval = setInterval(() => {
+      setSystemInfo(current => {
+        if (!current) return current
+
+        const [hours, minutes, seconds] = current.uptime
+          .split(':')
+          .map(Number)
+
+        let totalSeconds =
+          hours * 3600 +
+          minutes * 60 +
+          seconds +
+          1
+
+        const newHours = Math.floor(totalSeconds / 3600)
+
+        totalSeconds %= 3600
+
+        const newMinutes = Math.floor(totalSeconds / 60)
+
+        const newSeconds = totalSeconds % 60
+
+        return {
+          ...current,
+          uptime: `${String(newHours).padStart(2, '0')}:${String(
+            newMinutes
+          ).padStart(2, '0')}:${String(newSeconds).padStart(2, '0')}`,
+        }
+      })
+    }, 1000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
+  useEffect(() => {
+    const updateWeather = async () => {
+      try {
+        const data = await weatherService.getWeatherinfo()
+        setWeatherStats(data)
+      } catch (error) {
+        console.error(
+          'Error obteniendo información del clima:',
+          error
+        )
+      }
+    }
+
+    updateWeather()
+
+    const interval = setInterval(updateWeather, 600000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
   return (
     <aside className="system-panel">
       <div className="panel-header">
@@ -20,7 +115,7 @@ function SystemPanel() {
           <FiCpu />
           <div>
             <span className="stat-label">CPU</span>
-            <strong>24%</strong>
+            {systemInfo ? `${systemInfo.cpu}%` : '--'}
           </div>
         </div>
 
@@ -28,7 +123,7 @@ function SystemPanel() {
           <FiHardDrive />
           <div>
             <span className="stat-label">MEMORY</span>
-            <strong>41%</strong>
+            {systemInfo ? `${systemInfo.memory}%` : '--'}
           </div>
         </div>
 
@@ -36,7 +131,7 @@ function SystemPanel() {
           <FiClock />
           <div>
             <span className="stat-label">UPTIME</span>
-            <strong>02:41:18</strong>
+            {systemInfo ? `${systemInfo.uptime}` : '--:--:--'}
           </div>
         </div>
       </div>
@@ -48,8 +143,13 @@ function SystemPanel() {
         </div>
 
         <div className="weather">
-          <strong>24°C</strong>
-          <span>Clear Sky</span>
+          <strong>
+            {weatherStats ? `${weatherStats.temperature}°C` : '--°C'}
+          </strong>
+
+          <span>
+            {weatherStats ? weatherStats.description : '--'}
+          </span>
         </div>
       </div>
 
@@ -61,7 +161,7 @@ function SystemPanel() {
 
         <div className="camera-status">
           <span className="status-dot" />
-          READY
+          OFF
         </div>
       </div>
     </aside>

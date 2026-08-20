@@ -54,3 +54,7 @@ SEARCH_URLS = {
     "twitch": "https://www.twitch.tv/search?term={query}",
     "reddit": "https://www.reddit.com/search/?q={query}",
 }
+
+WEATHER_LATITUDE = -26.732
+WEATHER_LONGITUDE = -65.259
+WEATHER_LOCATION = "Tafí Viejo, Tucumán"

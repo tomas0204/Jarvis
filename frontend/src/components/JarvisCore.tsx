@@ -1,5 +1,5 @@
 import "./styles/JarvisCore.css"
-import { FiActivity, FiMic, FiCpu, FiVolume2 } from 'react-icons/fi'
+// import { FiActivity, FiMic, FiCpu, FiVolume2 } from 'react-icons/fi'
 import type { JarvisState } from '../types/jarvis'
 
 
@@ -8,21 +8,21 @@ interface JarvisCoreProps {
 }
 
 function JarvisCore({ state }: JarvisCoreProps) {
-  const getStateIcon = () => {
-    switch (state) {
-      case 'LISTENING':
-        return <FiMic />
+  // const getStateIcon = () => {
+  //   switch (state) {
+  //     case 'LISTENING':
+  //       return <FiMic />
 
-      case 'PROCESSING':
-        return <FiCpu />
+  //     case 'PROCESSING':
+  //       return <FiCpu />
 
-      case 'SPEAKING':
-        return <FiVolume2 />
+  //     case 'SPEAKING':
+  //       return <FiVolume2 />
 
-      default:
-        return <FiActivity />
-    }
-  }
+  //     default:
+  //       return <FiActivity />
+  //   }
+  // }
 
   return (
     <section className={`core-panel state-${state.toLowerCase()}`}>
