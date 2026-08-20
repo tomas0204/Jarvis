@@ -7,10 +7,12 @@ from fastapi.middleware.cors    import CORSMiddleware
 from backend.core.assistant     import Assistant
 from backend.core.event_bus     import event_queue
 from backend.commands.monitor   import SystemMonitor
-
+from backend.integrations.weather   import WeatherService
 
 assistant = Assistant()
 system_monitor = SystemMonitor()
+weather_service = WeatherService()
+
 connected_clients: list[WebSocket] = []
 
 
@@ -93,6 +95,11 @@ def send_message(message: MessageRequest):
         message.text,
         source="web"
     )
+
+@app.get("/api/weather")
+def get_weather():
+    return weather_service.get_current_weather()
+
 @app.get("/api/system")
 def get_system_info():
     return {

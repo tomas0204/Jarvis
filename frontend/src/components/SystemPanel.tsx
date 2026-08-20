@@ -8,12 +8,14 @@ import {
 } from 'react-icons/fi'
 import { useEffect, useState } from 'react'
 import {
-          systemService,
-          type SystemInfo,
-        } from '../services/systemService'
+  systemService,
+  type SystemInfo,
+  } from '../services/systemService'
+import { weatherService, type WeatherStats } from "../services/weatherService"
 
 function SystemPanel() {
   const [systemInfo, setSystemInfo] = useState<SystemInfo | null>(null)
+  const [weatherStats, setWeatherStats] = useState<WeatherStats | null>(null)
   useEffect(() => {
     const updateSystemInfo = async () => {
       try {
@@ -78,7 +80,29 @@ function SystemPanel() {
     return () => {
       clearInterval(interval)
     }
-  }, [systemInfo === null])
+  }, [])
+
+  useEffect(() => {
+    const updateWeather = async () => {
+      try {
+        const data = await weatherService.getWeatherinfo()
+        setWeatherStats(data)
+      } catch (error) {
+        console.error(
+          'Error obteniendo información del clima:',
+          error
+        )
+      }
+    }
+
+    updateWeather()
+
+    const interval = setInterval(updateWeather, 600000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
   return (
     <aside className="system-panel">
       <div className="panel-header">
@@ -119,8 +143,13 @@ function SystemPanel() {
         </div>
 
         <div className="weather">
-          <strong>24°C</strong>
-          <span>Clear Sky</span>
+          <strong>
+            {weatherStats ? `${weatherStats.temperature}°C` : '--°C'}
+          </strong>
+
+          <span>
+            {weatherStats ? weatherStats.description : '--'}
+          </span>
         </div>
       </div>
 
@@ -132,7 +161,7 @@ function SystemPanel() {
 
         <div className="camera-status">
           <span className="status-dot" />
-          READY
+          OFF
         </div>
       </div>
     </aside>
