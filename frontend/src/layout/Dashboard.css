@@ -10,10 +10,23 @@
 .dashboard-content {
   flex: 1;
   min-height: 0;
+
   display: grid;
   grid-template-columns: 280px 1fr 320px;
+
   gap: 1px;
+
   background: rgba(0, 200, 255, 0.08);
+
+  transition: grid-template-columns 450ms ease;
+}
+
+.dashboard-content.chat-collapsed {
+  grid-template-columns: 280px 1fr 0px;
+}
+
+.dashboard-content.chat-collapsed .conversation-panel {
+  overflow: hidden;
 }
 
 .left-panel,

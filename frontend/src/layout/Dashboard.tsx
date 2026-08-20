@@ -100,7 +100,7 @@ function Dashboard() {
 
       <Header status={status}/>
 
-      <section className="dashboard-content">
+      <section className={`dashboard-content ${!chatOpen ? 'chat-collapsed' : ''}`}>
 
         <SystemPanel />
 
