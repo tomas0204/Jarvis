@@ -16,6 +16,7 @@ import './Dashboard.css'
 function Dashboard() {
 
   const [chatOpen, setChatOpen] = useState(true)
+  const [systemOpen, setSystemOpen] = useState(true)
 
   const [jarvisState, setJarvisState] =
     useState<JarvisState>('IDLE')
@@ -100,9 +101,15 @@ function Dashboard() {
 
       <Header status={status}/>
 
-      <section className={`dashboard-content ${!chatOpen ? 'chat-collapsed' : ''}`}>
+      <section className={`dashboard-content
+        ${!chatOpen ? 'chat-collapsed' : ''}
+        ${!systemOpen ? 'system-collapsed' : ''}
+      `}>
 
-        <SystemPanel />
+        <SystemPanel 
+          isOpen={systemOpen}
+          onToggle={() => setSystemOpen(current => !current)}
+        />
 
         <JarvisCore
           state={jarvisState}

@@ -234,8 +234,82 @@
   box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
 }
 
-.conversation-panel.collapsed {
-  transform: translateX(100%);
+.conversation-panel.collapsed > *:not(.conversation-toggle) {
   opacity: 0;
   pointer-events: none;
+}
+
+.conversation-toggle {
+  position: absolute;
+
+  top: 50%;
+  left: -1px;
+
+  transform: translateY(-50%);
+
+  width: 22px;
+  height: 64px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  border-left: none;
+
+  background: rgba(3, 15, 22, 0.95);
+
+  color: #00d9ff;
+
+  cursor: pointer;
+
+  z-index: 10;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.conversation-toggle:hover {
+  background: rgba(0, 217, 255, 0.1);
+  color: #c9f7ff;
+}
+
+.conversation-toggle svg {
+  font-size: 14px;
+
+  transition: transform 0.3s ease;
+}
+
+.conversation-panel {
+  position: relative;
+
+  width: 320px;
+  min-width: 320px;
+
+  transition:
+    width 0.3s ease,
+    min-width 0.3s ease,
+    padding 0.3s ease;
+}
+
+.conversation-panel.collapsed {
+  width: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+.conversation-panel.collapsed > *:not(.conversation-toggle) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.conversation-panel.collapsed .conversation-toggle {
+  left: -22px;
+}
+
+.conversation-panel.collapsed .conversation-toggle svg {
+  transform: rotate(180deg);
 }

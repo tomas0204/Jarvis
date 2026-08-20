@@ -1,5 +1,5 @@
 import "./styles/ConversationPanel.css"
-import { FiMessageSquare, FiSend } from 'react-icons/fi'
+import { FiMessageSquare, FiSend, FiChevronRight } from 'react-icons/fi'
 import type { Message } from "../types/jarvis"
 import { useState, useRef, useEffect } from "react"
 import { jarvisService } from "../services/jarvis"
@@ -72,13 +72,6 @@ function ConversationPanel({
 
   return (
   <>
-  <button
-      className={`chat-toggle ${!isOpen ? 'collapsed' : ''}`}
-      onClick={onToggle}
-      aria-label={isOpen ? 'Collapse chat' : 'Expand chat'}
-    >
-      <FiMessageSquare />
-    </button>
     <aside className={`conversation-panel ${!isOpen ? 'collapsed' : ''}`}>
 
       <div className="panel-header">
@@ -91,13 +84,7 @@ function ConversationPanel({
           <span className="status-dot" />
           AVAILABLE
         </div>
-        <button
-          className="panel-toggle"
-          onClick={onToggle}
-          aria-label={isOpen ? 'Collapse chat' : 'Expand chat'}
-        >
-          <FiMessageSquare />
-        </button>
+      
       </div>
       <div className="conversation-messages">
 
@@ -151,7 +138,17 @@ function ConversationPanel({
         </button>
 
       </div>
-
+      <button
+        className="conversation-toggle"
+        onClick={onToggle}
+        aria-label={
+          isOpen
+            ? 'Collapse conversation panel'
+            : 'Expand conversation panel'
+        }
+      >
+        <FiChevronRight />
+      </button>
     </aside>
   </>
     
