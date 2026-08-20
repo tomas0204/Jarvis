@@ -7,11 +7,15 @@ import { jarvisService } from "../services/jarvis"
 interface ConversationPanelProps {
   messages: Message[]
   onSendMessage: (message: Message) => void
+  isOpen: boolean
+  onToggle: () => void
 }
 
 function ConversationPanel({
   messages,
   onSendMessage,
+  isOpen,
+  onToggle,
 }: ConversationPanelProps) {
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -67,7 +71,15 @@ function ConversationPanel({
   }
 
   return (
-    <aside className="conversation-panel">
+  <>
+  <button
+      className={`chat-toggle ${!isOpen ? 'collapsed' : ''}`}
+      onClick={onToggle}
+      aria-label={isOpen ? 'Collapse chat' : 'Expand chat'}
+    >
+      <FiMessageSquare />
+    </button>
+    <aside className={`conversation-panel ${!isOpen ? 'collapsed' : ''}`}>
 
       <div className="panel-header">
         <div className="panel-title">
@@ -79,6 +91,13 @@ function ConversationPanel({
           <span className="status-dot" />
           AVAILABLE
         </div>
+        <button
+          className="panel-toggle"
+          onClick={onToggle}
+          aria-label={isOpen ? 'Collapse chat' : 'Expand chat'}
+        >
+          <FiMessageSquare />
+        </button>
       </div>
       <div className="conversation-messages">
 
@@ -134,6 +153,8 @@ function ConversationPanel({
       </div>
 
     </aside>
+  </>
+    
   )
 }
 

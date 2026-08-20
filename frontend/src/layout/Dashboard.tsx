@@ -15,6 +15,8 @@ import './Dashboard.css'
 
 function Dashboard() {
 
+  const [chatOpen, setChatOpen] = useState(true)
+
   const [jarvisState, setJarvisState] =
     useState<JarvisState>('IDLE')
 
@@ -109,6 +111,8 @@ function Dashboard() {
         <ConversationPanel
           messages={messages}
           onSendMessage={handleSendMessage}
+          isOpen={chatOpen}
+          onToggle={() => setChatOpen(current => !current)}
         />
 
       </section>
