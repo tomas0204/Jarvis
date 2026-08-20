@@ -29,6 +29,7 @@ function Header({ status }: HeaderProps) {
             ? 'Voice activo. Jarvis está escuchando.'
             : 'Voice inactivo. Di "Jarvis" para activarlo.'
         }
+        style={{ cursor: 'crosshair' }}
       >
         <span className="status-dot" />
         {status}

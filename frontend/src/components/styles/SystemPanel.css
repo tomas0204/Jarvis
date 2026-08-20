@@ -185,6 +185,7 @@
 
 .system-panel.collapsed .system-toggle {
   right: -22px;
+  border: none;
 }
 
 .system-toggle.collapsed{
