@@ -1,8 +1,7 @@
-import { FiSettings} from 'react-icons/fi'
 import useCurrentTime from '../hooks/useCurrentTime'
 import './styles/Header.css'
 import type { JarvisStatus } from '../types/jarvis'
-
+import SettingsModal from "./SettingsModal"
 interface HeaderProps {
   status: JarvisStatus
 }
@@ -38,12 +37,7 @@ function Header({ status }: HeaderProps) {
       <div className="topbar-right">
         <span>{formatedTime}</span>
 
-        <button
-          className="icon-button"
-          aria-label="Configuración"
-        >
-          <FiSettings />
-        </button>
+        <SettingsModal></SettingsModal>
       </div>
     </header>
   )
