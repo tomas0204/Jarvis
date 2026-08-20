@@ -147,20 +147,6 @@ function SystemPanel({
       <div className="panel-header">
         <span>SYSTEM</span>
         <span className="panel-line" />
-        <button
-          className="panel-toggle"
-          onClick={onToggle}
-          aria-label={
-            isOpen
-              ? 'Collapse system panel'
-              : 'Open system panel'
-          }
-        >
-          {isOpen
-            ? <FiChevronLeft />
-            : <FiChevronRight />
-          }
-        </button>
       </div>
       <div className="system-stats">
         <div className="stat-card">
@@ -225,6 +211,17 @@ function SystemPanel({
           OFF
         </div>
       </div>
+      <button
+        className="system-toggle"
+        onClick={onToggle}
+        aria-label={
+          isOpen
+            ? 'Collapse system panel'
+            : 'Open system panel'
+        }
+      >
+        {isOpen ? <FiChevronLeft /> : <FiChevronRight />}
+      </button>
     </aside>
   )
 }
