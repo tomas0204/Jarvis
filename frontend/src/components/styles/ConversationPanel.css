@@ -308,6 +308,7 @@
 
 .conversation-panel.collapsed .conversation-toggle {
   left: -22px;
+  border: none;
 }
 
 .conversation-panel.collapsed .conversation-toggle svg {
