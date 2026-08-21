@@ -4,6 +4,7 @@ import "../styles/SettingsModal.css"
 import VoiceSettings from "./sections/VoiceSettings"
 import AISettings from "./sections/AISettings"
 import SystemSettings from "./sections/SystemSettings"
+import InterfaceSettings from "./sections/InterfaceSettings"
 function SettingsModal() {
   return (
     <Dialog.Root>
@@ -43,6 +44,7 @@ function SettingsModal() {
             <VoiceSettings></VoiceSettings>
             <AISettings></AISettings>
             <SystemSettings></SystemSettings>
+            <InterfaceSettings></InterfaceSettings>
           </div>
         </Dialog.Content>
       </Dialog.Portal>
