@@ -1,7 +1,6 @@
-import { useState } from "react"
-
+import { useSettings } from "../SettingsContext"
 function VoiceSettings() {
-  const [voiceResponses, setVoiceResponses] = useState(true)
+  const { settings, updateSetting } = useSettings()
 
   return (
     <section className="settings-section">
@@ -21,12 +20,17 @@ function VoiceSettings() {
         </div>
 
         <button
-          className={`settings-switch ${
-            voiceResponses ? "active" : ""
-          }`}
-          onClick={() => setVoiceResponses(prev => !prev)}
+        className={`settings-switch ${
+            settings.voiceResponses ? "active" : ""
+        }`}
+        onClick={() =>
+            updateSetting(
+            "voiceResponses",
+            !settings.voiceResponses
+            )
+        }
         >
-          {voiceResponses ? "ON" : "OFF"}
+        {settings.voiceResponses ? "ON" : "OFF"}
         </button>
       </div>
 
@@ -42,11 +46,14 @@ function VoiceSettings() {
         </div>
 
         <select
-          className="settings-select"
-          defaultValue="en-US"
+        className="settings-select"
+        value={settings.language}
+        onChange={(event) =>
+            updateSetting("language", event.target.value)
+        }
         >
-          <option value="en-US">ENGLISH</option>
-          <option value="es-AR">ESPAÑOL</option>
+        <option value="en-US">ENGLISH</option>
+        <option value="es-AR">ESPAÑOL</option>
         </select>
       </div>
 
@@ -67,10 +74,16 @@ function VoiceSettings() {
             min="0.5"
             max="2"
             step="0.1"
-            defaultValue="1"
-          />
+            value={settings.speechRate}
+            onChange={(event) =>
+                updateSetting(
+                "speechRate",
+                Number(event.target.value)
+                )
+            }
+            />
 
-          <span>1.0x</span>
+            <span>{settings.speechRate.toFixed(1)}x</span>
         </div>
       </div>
     </section>

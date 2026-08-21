@@ -5,7 +5,7 @@ import SystemPanel from '../components/SystemPanel'
 import JarvisCore from '../components/JarvisCore'
 import ConversationPanel from '../components/ConversationPanel'
 import ControlBar from '../components/ControlBar'
-
+import { SettingsProvider } from "../components/SettingsModal/SettingsContext"
 import { jarvisService } from '../services/jarvis'
 
 import type { JarvisState, Message, JarvisStatus } from '../types/jarvis'
@@ -97,39 +97,41 @@ function Dashboard() {
 
 
   return (
-    <main className="dashboard">
+    <SettingsProvider>
+      <main className="dashboard">
 
-      <Header status={status}/>
+        <Header status={status}/>
 
-      <section className={`dashboard-content
-        ${!chatOpen ? 'chat-collapsed' : ''}
-        ${!systemOpen ? 'system-collapsed' : ''}
-      `}>
+        <section className={`dashboard-content
+          ${!chatOpen ? 'chat-collapsed' : ''}
+          ${!systemOpen ? 'system-collapsed' : ''}
+        `}>
 
-        <SystemPanel 
-          isOpen={systemOpen}
-          onToggle={() => setSystemOpen(current => !current)}
-        />
+          <SystemPanel 
+            isOpen={systemOpen}
+            onToggle={() => setSystemOpen(current => !current)}
+          />
 
-        <JarvisCore
+          <JarvisCore
+            state={jarvisState}
+          />
+
+          <ConversationPanel
+            messages={messages}
+            onSendMessage={handleSendMessage}
+            isOpen={chatOpen}
+            onToggle={() => setChatOpen(current => !current)}
+          />
+
+        </section>
+
+        <ControlBar
           state={jarvisState}
+          onStateChange={setJarvisState}
         />
 
-        <ConversationPanel
-          messages={messages}
-          onSendMessage={handleSendMessage}
-          isOpen={chatOpen}
-          onToggle={() => setChatOpen(current => !current)}
-        />
-
-      </section>
-
-      <ControlBar
-        state={jarvisState}
-        onStateChange={setJarvisState}
-      />
-
-    </main>
+      </main>
+    </SettingsProvider>
   )
 }
 
