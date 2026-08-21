@@ -3,6 +3,7 @@ import { FiSettings, FiX } from "react-icons/fi"
 import "../styles/SettingsModal.css"
 import VoiceSettings from "./sections/VoiceSettings"
 import AISettings from "./sections/AISettings"
+import SystemSettings from "./sections/SystemSettings"
 function SettingsModal() {
   return (
     <Dialog.Root>
@@ -41,6 +42,7 @@ function SettingsModal() {
           <div className="settings-content">
             <VoiceSettings></VoiceSettings>
             <AISettings></AISettings>
+            <SystemSettings></SystemSettings>
           </div>
         </Dialog.Content>
       </Dialog.Portal>
