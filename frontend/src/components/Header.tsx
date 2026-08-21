@@ -2,7 +2,7 @@ import { FiSettings } from 'react-icons/fi'
 import useCurrentTime from '../hooks/useCurrentTime'
 import './styles/Header.css'
 import type { JarvisStatus } from '../types/jarvis'
-
+import SettingsModal from "./SettingsModal/SettingsModal.tsx"
 interface HeaderProps {
   status: JarvisStatus
 }
@@ -29,6 +29,7 @@ function Header({ status }: HeaderProps) {
             ? 'Voice activo. Jarvis está escuchando.'
             : 'Voice inactivo. Di "Jarvis" para activarlo.'
         }
+        style={{ cursor: 'crosshair' }}
       >
         <span className="status-dot" />
         {status}
@@ -37,12 +38,7 @@ function Header({ status }: HeaderProps) {
       <div className="topbar-right">
         <span>{formatedTime}</span>
 
-        <button
-          className="icon-button"
-          aria-label="Configuración"
-        >
-          <FiSettings />
-        </button>
+        <SettingsModal></SettingsModal>
       </div>
     </header>
   )
