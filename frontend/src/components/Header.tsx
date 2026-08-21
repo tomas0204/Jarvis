@@ -1,7 +1,7 @@
 import useCurrentTime from '../hooks/useCurrentTime'
 import './styles/Header.css'
 import type { JarvisStatus } from '../types/jarvis'
-import SettingsModal from "./SettingsModal"
+import SettingsModal from "./SettingsModal/SettingsModal.tsx"
 interface HeaderProps {
   status: JarvisStatus
 }
