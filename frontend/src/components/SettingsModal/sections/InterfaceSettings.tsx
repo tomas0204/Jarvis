@@ -1,4 +1,9 @@
+import { useState } from "react"
+
 function InterfaceSettings() {
+  const [animations, setAnimations] = useState(true)
+  const [soundEffects, setSoundEffects] = useState(true)
+
   return (
     <section className="settings-section">
       <div className="settings-section-title">
@@ -16,8 +21,13 @@ function InterfaceSettings() {
           </span>
         </div>
 
-        <button className="settings-switch active">
-          ON
+        <button
+          className={`settings-switch ${
+            animations ? "active" : ""
+          }`}
+          onClick={() => setAnimations(prev => !prev)}
+        >
+          {animations ? "ON" : "OFF"}
         </button>
       </div>
 
@@ -32,40 +42,13 @@ function InterfaceSettings() {
           </span>
         </div>
 
-        <button className="settings-switch active">
-          ON
-        </button>
-      </div>
-
-      <div className="settings-option">
-        <div>
-          <span className="settings-option-name">
-            Chat panel
-          </span>
-
-          <span className="settings-option-description">
-            Show the conversation panel on the dashboard
-          </span>
-        </div>
-
-        <button className="settings-switch active">
-          ON
-        </button>
-      </div>
-
-      <div className="settings-option">
-        <div>
-          <span className="settings-option-name">
-            System panel
-          </span>
-
-          <span className="settings-option-description">
-            Show system information on the dashboard
-          </span>
-        </div>
-
-        <button className="settings-switch active">
-          ON
+        <button
+          className={`settings-switch ${
+            soundEffects ? "active" : ""
+          }`}
+          onClick={() => setSoundEffects(prev => !prev)}
+        >
+          {soundEffects ? "ON" : "OFF"}
         </button>
       </div>
     </section>

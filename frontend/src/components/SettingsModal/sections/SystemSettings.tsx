@@ -1,4 +1,10 @@
+import { useState } from "react"
+
 function SystemSettings() {
+  const [startWithWindows, setStartWithWindows] = useState(false)
+  const [confirmActions, setConfirmActions] = useState(true)
+  const [voiceActivation, setVoiceActivation] = useState(true)
+
   return (
     <section className="settings-section">
       <div className="settings-section-title">
@@ -16,8 +22,13 @@ function SystemSettings() {
           </span>
         </div>
 
-        <button className="settings-switch">
-          OFF
+        <button
+          className={`settings-switch ${
+            startWithWindows ? "active" : ""
+          }`}
+          onClick={() => setStartWithWindows(prev => !prev)}
+        >
+          {startWithWindows ? "ON" : "OFF"}
         </button>
       </div>
 
@@ -32,8 +43,13 @@ function SystemSettings() {
           </span>
         </div>
 
-        <button className="settings-switch active">
-          ON
+        <button
+          className={`settings-switch ${
+            confirmActions ? "active" : ""
+          }`}
+          onClick={() => setConfirmActions(prev => !prev)}
+        >
+          {confirmActions ? "ON" : "OFF"}
         </button>
       </div>
 
@@ -48,8 +64,13 @@ function SystemSettings() {
           </span>
         </div>
 
-        <button className="settings-switch active">
-          ON
+        <button
+          className={`settings-switch ${
+            voiceActivation ? "active" : ""
+          }`}
+          onClick={() => setVoiceActivation(prev => !prev)}
+        >
+          {voiceActivation ? "ON" : "OFF"}
         </button>
       </div>
     </section>
