@@ -1,9 +1,11 @@
 import { useState } from "react"
+import { useSettings } from "../SettingsContext"
 
 function SystemSettings() {
   const [startWithWindows, setStartWithWindows] = useState(false)
   const [confirmActions, setConfirmActions] = useState(true)
   const [voiceActivation, setVoiceActivation] = useState(true)
+  const { settings, updateSetting } = useSettings()
 
   return (
     <section className="settings-section">
@@ -23,12 +25,17 @@ function SystemSettings() {
         </div>
 
         <button
-          className={`settings-switch ${
-            startWithWindows ? "active" : ""
-          }`}
-          onClick={() => setStartWithWindows(prev => !prev)}
+        className={`settings-switch ${
+            settings.startWithWindows ? "active" : ""
+        }`}
+        onClick={() =>
+            updateSetting(
+              "startWithWindows",
+            !settings.startWithWindows
+            )
+        } 
         >
-          {startWithWindows ? "ON" : "OFF"}
+        {settings.startWithWindows ? "ON" : "OFF"}
         </button>
       </div>
 
@@ -44,12 +51,17 @@ function SystemSettings() {
         </div>
 
         <button
-          className={`settings-switch ${
-            confirmActions ? "active" : ""
-          }`}
-          onClick={() => setConfirmActions(prev => !prev)}
+        className={`settings-switch ${
+            settings.confirmActions ? "active" : ""
+        }`}
+        onClick={() =>
+            updateSetting(
+              "confirmActions",
+            !settings.confirmActions
+            )
+        } 
         >
-          {confirmActions ? "ON" : "OFF"}
+        {settings.confirmActions ? "ON" : "OFF"}
         </button>
       </div>
 
@@ -65,12 +77,17 @@ function SystemSettings() {
         </div>
 
         <button
-          className={`settings-switch ${
-            voiceActivation ? "active" : ""
-          }`}
-          onClick={() => setVoiceActivation(prev => !prev)}
+        className={`settings-switch ${
+            settings.voiceActivation ? "active" : ""
+        }`}
+        onClick={() =>
+            updateSetting(
+              "voiceActivation",
+            !settings.voiceActivation
+            )
+        } 
         >
-          {voiceActivation ? "ON" : "OFF"}
+        {settings.voiceActivation ? "ON" : "OFF"}
         </button>
       </div>
     </section>
