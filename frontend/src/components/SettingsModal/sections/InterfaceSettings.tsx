@@ -1,8 +1,7 @@
-import { useState } from "react"
+import { useSettings } from "../SettingsContext"
 
 function InterfaceSettings() {
-  const [animations, setAnimations] = useState(true)
-  const [soundEffects, setSoundEffects] = useState(true)
+  const {settings, updateSetting} = useSettings()
 
   return (
     <section className="settings-section">
@@ -23,11 +22,16 @@ function InterfaceSettings() {
 
         <button
           className={`settings-switch ${
-            animations ? "active" : ""
+              settings.animations ? "active" : ""
           }`}
-          onClick={() => setAnimations(prev => !prev)}
-        >
-          {animations ? "ON" : "OFF"}
+          onClick={() =>
+              updateSetting(
+                "animations",
+              !settings.animations
+              )
+          } 
+          >
+          {settings.animations ? "ON" : "OFF"}
         </button>
       </div>
 
@@ -44,11 +48,16 @@ function InterfaceSettings() {
 
         <button
           className={`settings-switch ${
-            soundEffects ? "active" : ""
+              settings.soundEffects? "active" : ""
           }`}
-          onClick={() => setSoundEffects(prev => !prev)}
-        >
-          {soundEffects ? "ON" : "OFF"}
+          onClick={() =>
+              updateSetting(
+                "soundEffects",
+              !settings.soundEffects
+              )
+          } 
+          >
+          {settings.soundEffects ? "ON" : "OFF"}
         </button>
       </div>
     </section>

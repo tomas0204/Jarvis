@@ -1,10 +1,6 @@
-import { useState } from "react"
 import { useSettings } from "../SettingsContext"
 
 function SystemSettings() {
-  const [startWithWindows, setStartWithWindows] = useState(false)
-  const [confirmActions, setConfirmActions] = useState(true)
-  const [voiceActivation, setVoiceActivation] = useState(true)
   const { settings, updateSetting } = useSettings()
 
   return (
