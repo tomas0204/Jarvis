@@ -1,4 +1,7 @@
+import { useSettings } from "../SettingsContext"
+
 function AISettings() {
+  const {settings, updateSetting} = useSettings()
   return (
     <section className="settings-section">
       <div className="settings-section-title">
@@ -18,7 +21,13 @@ function AISettings() {
 
         <select
           className="settings-select"
-          defaultValue="groq"
+          value={settings.provider}
+          onChange={(event) =>
+            updateSetting(
+              "provider",
+              event.target.value
+            )
+          }
         >
           <option value="groq">GROQ</option>
         </select>
@@ -37,7 +46,13 @@ function AISettings() {
 
         <select
           className="settings-select"
-          defaultValue="llama"
+          value={settings.model}
+          onChange={(event) =>{
+            updateSetting(
+              "model",
+              event.target.value
+            )
+          }}
         >
           <option value="llama">
             LLAMA
@@ -62,10 +77,16 @@ function AISettings() {
             min="0"
             max="2"
             step="0.1"
-            defaultValue="0.7"
+            value={settings.temperature}
+            onChange={(event) =>
+              updateSetting(
+                "temperature",
+                Number(event.target.value)
+              )
+            }
           />
 
-          <span>0.7</span>
+          <span>{settings.temperature.toFixed(1)}</span>
         </div>
       </div>
     </section>
