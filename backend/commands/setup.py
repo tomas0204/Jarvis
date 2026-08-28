@@ -1,0 +1,35 @@
+from  backend.commands.applications import ApplicationCommands
+from  backend.commands.system_info import SystemInfoCommands
+from  backend.commands.web import WebCommands
+from  config import WEBSITES
+
+def register_commands(registry, system):
+    applications = ApplicationCommands(system)
+    system_info = SystemInfoCommands()
+
+    registry.register(
+        "open_application",
+        applications.open
+    )
+
+    registry.register(
+        "get_time",
+        system_info.get_time
+    )
+    
+    registry.register(
+        "get_date",
+        system_info.get_date
+    )
+    
+    web = WebCommands()
+
+    registry.register(
+        "open_website",
+        web.open_website
+    )
+    
+    registry.register(
+        "search_website",
+        web.search_website
+    )

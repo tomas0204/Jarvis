@@ -1,0 +1,46 @@
+.control-bar {
+  height: 76px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px;
+  border-top: 1px solid rgba(0, 200, 255, 0.2);
+  background: rgba(3, 7, 12, 0.96);
+}
+
+.control-button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 38px;
+  padding: 0 16px;
+  border: 1px solid rgba(0, 217, 255, 0.15);
+  background: rgba(0, 217, 255, 0.025);
+  color: #52727c;
+  font-family: inherit;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.control-button svg {
+  font-size: 15px;
+}
+
+.control-button:hover {
+  color: #79dff2;
+  border-color: rgba(0, 217, 255, 0.35);
+  background: rgba(0, 217, 255, 0.06);
+}
+
+.control-button.active {
+  color: #00d9ff;
+  border-color: rgba(0, 217, 255, 0.4);
+  box-shadow: 0 0 12px rgba(0, 217, 255, 0.08);
+}

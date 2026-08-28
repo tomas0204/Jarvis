@@ -1,0 +1,26 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "enables the default permissions",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        {
+          "name": "python",
+          "cmd": ".venv\\Scripts\\python.exe",
+          "args": [
+            "-m",
+            "uvicorn",
+            "backend.api.app:app"
+          ],
+          "sidecar": false
+        }
+      ]
+    }
+  ]
+}
