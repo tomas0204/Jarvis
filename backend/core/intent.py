@@ -1,4 +1,4 @@
-from config import WEBSITES
+from config import WEBSITES, APPLICATIONS
 
 OPEN_WORDS = [
     "abre",
@@ -157,23 +157,15 @@ class Intent:
         if not any(word in words for word in OPEN_WORDS):
             return None
 
-        if "chrome" in words or "navegador" in words:
-            return {
-                "type": "command",
-                "name": "open_application",
-                "args": {
-                    "name": "chrome"
+        for application in APPLICATIONS:
+            if application in words:
+                return {
+                    "type": "command",
+                    "name": "open_aplication",
+                    "args": {
+                        "name": application
+                    }
                 }
-            }
-
-        if "steam" in words or "juego" in words:
-            return {
-                "type": "command",
-                "name": "open_application",
-                "args": {
-                    "name": "steam"
-                }
-            }
 
         return None
 

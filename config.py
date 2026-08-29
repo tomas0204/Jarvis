@@ -32,8 +32,8 @@ Tus respuestas deben ser concisas y directas, evitando redundancias ni palabras 
 LLM_MAX_HISTORY = 10
 
 APPLICATIONS = {
-    "chrome": "C:\Program Files\Google\Chrome\Application\chrome.exe",
-    "steam": "C:\Program Files (x86)\Steam\steam.exe",
+    "chrome": r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+    "steam": r"C:\Program Files (x86)\Steam\steam.exe",
 }
 
 WEBSITES = {
