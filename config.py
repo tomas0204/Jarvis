@@ -32,10 +32,21 @@ Tus respuestas deben ser concisas y directas, evitando redundancias ni palabras 
 LLM_MAX_HISTORY = 10
 
 APPLICATIONS = {
-    "chrome": r"C:\Program Files\Google\Chrome\Application\chrome.exe",
-    "steam": r"C:\Program Files (x86)\Steam\steam.exe",
-}
+    "chrome": {
+        "type": "path",
+        "value": r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+    },
 
+    "steam": {
+        "type": "path",
+        "value": r"C:\Program Files (x86)\Steam\steam.exe"
+    },
+
+    "spotify": {
+        "type": "uri",
+        "value": "spotify:"
+    },
+}
 WEBSITES = {
     "youtube": "https://www.youtube.com",
     "github": "https://github.com",

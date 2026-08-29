@@ -161,7 +161,7 @@ class Intent:
             if application in words:
                 return {
                     "type": "command",
-                    "name": "open_aplication",
+                    "name": "open_application",
                     "args": {
                         "name": application
                     }
