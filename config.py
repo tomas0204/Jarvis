@@ -47,6 +47,11 @@ APPLICATIONS = {
         "value": r"C:\Users\tomas\AppData\Local\Discord\app-1.0.9255\Discord.exe"
     },
     
+    "visual": {
+        "type": "path",
+        "value": r"C:\Users\tomas\AppData\Local\Programs\Microsoft VS Code\Code.exe"
+    },
+    
     "spotify": {
         "type": "uri",
         "value": "spotify:"
