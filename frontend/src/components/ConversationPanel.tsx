@@ -45,23 +45,12 @@ function ConversationPanel({
     onSendMessage(userMessage)
 
     try {
-      const data = await jarvisService.sendMessage(text)
-
-      const jarvisMessage: Message = {
-        id: Date.now() + 1,
-        sender: 'JARVIS',
-        text: data.response,
-        timestamp: new Date(),
-      }
-
-      // Mostrar respuesta de Jarvis
-      onSendMessage(jarvisMessage)
-
+      await jarvisService.sendMessage(text)
     } catch (error) {
       console.error('Error enviando mensaje:', error)
     }
   }
-
+  
   const sender = (send: Message['sender']) => {
     if (send === 'JARVIS') {
       return 'message assistant-message message-author'
