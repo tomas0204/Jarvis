@@ -1,4 +1,7 @@
 import os
+import tempfile
+
+import pygame
 import pyttsx3
 
 from dotenv import load_dotenv
@@ -48,36 +51,64 @@ class TextToSpeech:
 
             return False
 
-    def _speak_elevenlabs_stream(self, text):
+    def _speak_elevenlabs(self, text):
 
         if not self._initialize_elevenlabs():
             return False
 
+        temp_path = None
+
         try:
 
-            audio_stream = self.client.text_to_speech.convert_as_stream(
+            audio = self.client.text_to_speech.convert(
                 text=text,
                 voice_id=self.VOICE_ID,
                 model_id=self.MODEL_ID,
                 output_format="mp3_44100_128",
             )
 
-            for chunk in audio_stream:
+            audio_data = b"".join(audio)
 
-                if chunk:
-                    print(f"Chunk recibido: {len(chunk)} bytes")
+            with tempfile.NamedTemporaryFile(
+                suffix=".mp3",
+                delete=False
+            ) as temp_file:
+
+                temp_file.write(audio_data)
+                temp_path = temp_file.name
+
+            pygame.mixer.init()
+            pygame.mixer.music.load(temp_path)
+            pygame.mixer.music.play()
+
+            while pygame.mixer.music.get_busy():
+                pygame.time.Clock().tick(10)
 
             return True
 
         except Exception as error:
 
             logger.warning(
-                f"ElevenLabs streaming no disponible: {error}"
+                f"ElevenLabs no disponible: {error}"
             )
 
             return False
 
         finally:
+
+            try:
+                pygame.mixer.music.stop()
+                pygame.mixer.quit()
+            except Exception:
+                pass
+
+            if temp_path and os.path.exists(temp_path):
+
+                try:
+                    os.remove(temp_path)
+                except OSError:
+                    pass
+
             self.client = None
 
     # =========================
