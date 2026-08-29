@@ -1,55 +1,86 @@
-import pyttsx3
-from config                 import TTS_RATE, TTS_VOICE, TTS_VOLUME
-from backend.utils.logger   import logger
+import os
+import tempfile
+
+import pygame
+from dotenv import load_dotenv
+from elevenlabs.client import ElevenLabs
+
+from backend.utils.logger import logger
+
+
+load_dotenv()
+
 
 class TextToSpeech:
 
+    VOICE_ID = "bM9fxaEUB1jfSSiHrP24"
+    MODEL_ID = "eleven_multilingual_v2"
+
     def __init__(self):
-        self.engine = None
+        self.client = None
 
-    def _initialize_engine(self):
+    def _initialize_client(self):
         try:
-            self.engine = pyttsx3.init()
+            api_key = os.getenv("ELEVENLABS_API_KEY")
 
-            self.engine.setProperty("rate", TTS_RATE)
-            self.engine.setProperty("volume", TTS_VOLUME)
+            if not api_key:
+                logger.error("No se encontró ELEVENLABS_API_KEY")
+                return False
 
-            voice_id = self._find_voice(TTS_VOICE)
-
-            if voice_id:
-                logger.info(f"Usando la voz '{TTS_VOICE}'")
-                self.engine.setProperty("voice", voice_id)
+            self.client = ElevenLabs(api_key=api_key)
 
             return True
 
         except Exception as error:
-            logger.error(f"No se pudo inicializar TTS: {error}")
-            self.engine = None
+            logger.error(
+                f"No se pudo inicializar ElevenLabs TTS: {error}"
+            )
+            self.client = None
             return False
 
-    def _find_voice(self, name):
-        try:
-            voices = self.engine.getProperty("voices")
-
-            for voice in voices:
-                if name.lower() in voice.name.lower():
-                    return voice.id
-
-        except Exception as error:
-            logger.error(f"No se pudieron obtener las voces: {error}")
-
-        return None
-
     def speak(self, text):
-        if not self._initialize_engine():
+
+        if not self._initialize_client():
             return
 
+        temp_path = None
+
         try:
-            self.engine.say(text)
-            self.engine.runAndWait()
+            audio = self.client.text_to_speech.convert(
+                text=text,
+                voice_id=self.VOICE_ID,
+                model_id=self.MODEL_ID,
+                output_format="mp3_44100_128",
+            )
+
+            audio_data = b"".join(audio)
+
+            with tempfile.NamedTemporaryFile(
+                suffix=".mp3",
+                delete=False
+            ) as temp_file:
+
+                temp_file.write(audio_data)
+                temp_path = temp_file.name
+
+            pygame.mixer.init()
+            pygame.mixer.music.load(temp_path)
+            pygame.mixer.music.play()
+
+            while pygame.mixer.music.get_busy():
+                pygame.time.Clock().tick(10)
 
         except Exception as error:
             logger.error(f"Error al reproducir voz: {error}")
 
         finally:
-            self.engine = None
+            pygame.mixer.music.stop()
+            pygame.mixer.quit()
+
+            if temp_path and os.path.exists(temp_path):
+                try:
+                    os.remove(temp_path)
+                except OSError:
+                    pass
+
+            self.client = None
