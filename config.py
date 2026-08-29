@@ -57,6 +57,11 @@ APPLICATIONS = {
         "value": r"D:\SteamLibrary\steamapps\common\Overwatch\Overwatch.exe"
     },
     
+    "minecraft": {
+        "type": "path",
+        "value": r"C:\Users\tomas\AppData\Local\Programs\lunarclient\Lunar Client.exe"
+    },
+    
     "spotify": {
         "type": "uri",
         "value": "spotify:"
