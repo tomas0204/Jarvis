@@ -47,9 +47,14 @@ APPLICATIONS = {
         "value": r"C:\Users\tomas\AppData\Local\Discord\app-1.0.9255\Discord.exe"
     },
     
-    "visual": {
+    "code": {
         "type": "path",
         "value": r"C:\Users\tomas\AppData\Local\Programs\Microsoft VS Code\Code.exe"
+    },
+    
+    "overwatch": {
+        "type": "path",
+        "value": r"D:\SteamLibrary\steamapps\common\Overwatch\Overwatch.exe"
     },
     
     "spotify": {
