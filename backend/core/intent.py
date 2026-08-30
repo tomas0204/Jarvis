@@ -15,6 +15,23 @@ OPEN_WORDS = [
     "entrar"
 ]
 
+VOLUME_UP_WORDS = [
+    "sube",
+    "subir",
+    "aumenta",
+    "aumentar",
+    "incrementa",
+    "incrementar"
+]
+
+VOLUME_DOWN_WORDS = [
+    "baja",
+    "bajar",
+    "disminuye",
+    "disminuir",
+    "reduce",
+    "reducir"
+]
 
 class Intent:
     
@@ -51,6 +68,12 @@ class Intent:
 
         # Buscar en web
         result = self._detect_search(text)
+
+        if result:
+            return result
+        
+        # Volumen
+        result = self._detect_volume(words)
 
         if result:
             return result
@@ -169,6 +192,25 @@ class Intent:
                             "name": application
                         }
                     }
+
+        return None
+
+    def _detect_volume(self, words):
+        if any(word in words for word in VOLUME_UP_WORDS):
+            if "volumen" in words:
+                return {
+                    "type": "command",
+                    "name": "volume_up",
+                    "args": {}
+                }
+
+        if any(word in words for word in VOLUME_DOWN_WORDS):
+            if "volumen" in words:
+                return {
+                    "type": "command",
+                    "name": "volume_down",
+                    "args": {}
+                }
 
         return None
 
