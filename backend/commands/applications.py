@@ -8,15 +8,18 @@ class ApplicationCommands:
         self.system = system
 
     def open(self, name):
-        path = APPLICATIONS.get(name)
+        application = APPLICATIONS.get(name)
 
-        if path is None:
+        if application is None:
             return CommandResult(
                 False,
                 "No conozco esa aplicación."
             )
 
-        success = self.system.open_application(path)
+        success = self.system.open_application(
+            application["type"],
+            application["value"]
+        )
 
         if success:
             return CommandResult(

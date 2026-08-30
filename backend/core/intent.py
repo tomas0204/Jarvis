@@ -1,4 +1,4 @@
-from config import WEBSITES
+from config import WEBSITES, APPLICATIONS
 
 OPEN_WORDS = [
     "abre",
@@ -15,6 +15,23 @@ OPEN_WORDS = [
     "entrar"
 ]
 
+VOLUME_UP_WORDS = [
+    "sube",
+    "subir",
+    "aumenta",
+    "aumentar",
+    "incrementa",
+    "incrementar"
+]
+
+VOLUME_DOWN_WORDS = [
+    "baja",
+    "bajar",
+    "disminuye",
+    "disminuir",
+    "reduce",
+    "reducir"
+]
 
 class Intent:
     
@@ -51,6 +68,12 @@ class Intent:
 
         # Buscar en web
         result = self._detect_search(text)
+
+        if result:
+            return result
+        
+        # Volumen
+        result = self._detect_volume(words)
 
         if result:
             return result
@@ -156,24 +179,38 @@ class Intent:
     def _detect_application(self, words):
         if not any(word in words for word in OPEN_WORDS):
             return None
+        
+        text = " ".join(words)
 
-        if "chrome" in words or "navegador" in words:
-            return {
-                "type": "command",
-                "name": "open_application",
-                "args": {
-                    "name": "chrome"
-                }
-            }
+        for application, data in APPLICATIONS.items():
+            for alias in data.get("aliases", []):
+                if alias in text:
+                    return {
+                        "type": "command",
+                        "name": "open_application",
+                        "args": {
+                            "name": application
+                        }
+                    }
 
-        if "steam" in words or "juego" in words:
-            return {
-                "type": "command",
-                "name": "open_application",
-                "args": {
-                    "name": "steam"
+        return None
+
+    def _detect_volume(self, words):
+        if any(word in words for word in VOLUME_UP_WORDS):
+            if "volumen" in words:
+                return {
+                    "type": "command",
+                    "name": "volume_up",
+                    "args": {}
                 }
-            }
+
+        if any(word in words for word in VOLUME_DOWN_WORDS):
+            if "volumen" in words:
+                return {
+                    "type": "command",
+                    "name": "volume_down",
+                    "args": {}
+                }
 
         return None
 

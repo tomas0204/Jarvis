@@ -1,12 +1,13 @@
 from  backend.commands.applications import ApplicationCommands
-from  backend.commands.system_info import SystemInfoCommands
-from  backend.commands.web import WebCommands
-from  config import WEBSITES
+from  backend.commands.system_info  import SystemInfoCommands
+from  backend.commands.web          import WebCommands
+from  backend.commands.media        import MediaCommands
 
 def register_commands(registry, system):
     applications = ApplicationCommands(system)
     system_info = SystemInfoCommands()
-
+    media = MediaCommands()
+    
     registry.register(
         "open_application",
         applications.open
@@ -33,3 +34,14 @@ def register_commands(registry, system):
         "search_website",
         web.search_website
     )
+    
+    registry.register(
+        "volume_up",
+        media.volume_up
+    )
+    
+    registry.register(
+        "volume_down",
+        media.volume_down
+    )
+    
