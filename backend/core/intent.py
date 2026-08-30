@@ -156,16 +156,19 @@ class Intent:
     def _detect_application(self, words):
         if not any(word in words for word in OPEN_WORDS):
             return None
+        
+        text = " ".join(words)
 
-        for application in APPLICATIONS:
-            if application in words:
-                return {
-                    "type": "command",
-                    "name": "open_application",
-                    "args": {
-                        "name": application
+        for application, data in APPLICATIONS.items():
+            for alias in data.get("aliases", []):
+                if alias in text:
+                    return {
+                        "type": "command",
+                        "name": "open_application",
+                        "args": {
+                            "name": application
+                        }
                     }
-                }
 
         return None
 

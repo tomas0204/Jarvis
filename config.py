@@ -34,37 +34,65 @@ LLM_MAX_HISTORY = 10
 APPLICATIONS = {
     "chrome": {
         "type": "path",
-        "value": r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+        "value": r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+        "aliases": [
+            "chrome",
+            "google chrome",
+            "navegador"
+        ]
     },
 
     "steam": {
         "type": "path",
-        "value": r"C:\Program Files (x86)\Steam\steam.exe"
+        "value": r"C:\Program Files (x86)\Steam\steam.exe",
+        "aliases": [
+            "steam"
+        ]
     },
-    
+
     "discord": {
         "type": "path",
-        "value": r"C:\Users\tomas\AppData\Local\Discord\app-1.0.9255\Discord.exe"
+        "value": r"C:\Users\tomas\AppData\Local\Discord\app-1.0.9255\Discord.exe",
+        "aliases": [
+            "discord"
+        ]
     },
-    
-    "code": {
+
+    "Visual Studio Code": {
         "type": "path",
-        "value": r"C:\Users\tomas\AppData\Local\Programs\Microsoft VS Code\Code.exe"
+        "value": r"C:\Users\tomas\AppData\Local\Programs\Microsoft VS Code\Code.exe",
+        "aliases": [
+            "code",
+            "vs code",
+            "visual studio"
+        ]
     },
-    
+
     "overwatch": {
         "type": "path",
-        "value": r"D:\SteamLibrary\steamapps\common\Overwatch\Overwatch.exe"
+        "value": r"D:\SteamLibrary\steamapps\common\Overwatch\Overwatch.exe",
+        "aliases": [
+            "overwatch",
+            "overwatch 2"
+        ]
     },
-    
+
     "minecraft": {
         "type": "path",
-        "value": r"C:\Users\tomas\AppData\Local\Programs\lunarclient\Lunar Client.exe"
+        "value": r"C:\Users\tomas\AppData\Local\Programs\lunarclient\Lunar Client.exe",
+        "aliases": [
+            "minecraft",
+            "lunar client",
+            "lunar"
+        ]
     },
-    
+
     "spotify": {
         "type": "uri",
-        "value": "spotify:"
+        "value": "spotify:",
+        "aliases": [
+            "spotify"
+        ]
     },
 }
 WEBSITES = {
