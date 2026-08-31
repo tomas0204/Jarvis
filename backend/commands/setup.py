@@ -45,3 +45,29 @@ def register_commands(registry, system):
         media.volume_down
     )
     
+    registry.register(
+        "set_volume",
+        media.set_volume
+    )
+
+    registry.register(
+        "mute",
+        media.mute
+    )
+    
+    registry.register(
+        "unmute",
+        media.unmute
+    )
+    
+    registry.register(
+        "pause",
+        media.pause
+    )
+    
+    registry.register(
+        "resume",
+        media.resume
+    )
+
+    

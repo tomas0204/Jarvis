@@ -1,81 +1,45 @@
+import asyncio
 import os
 import tempfile
 
+import edge_tts
 import pygame
 import pyttsx3
 
-from dotenv import load_dotenv
-from elevenlabs.client import ElevenLabs
-
-from config import TTS_RATE, TTS_VOICE, TTS_VOLUME
+from config import TTS_RATE, TTS_VOLUME, TTS_VOICE
 from backend.utils.logger import logger
-
-
-load_dotenv()
 
 
 class TextToSpeech:
 
-    VOICE_ID = "bM9fxaEUB1jfSSiHrP24"
-    MODEL_ID = "eleven_multilingual_v2"
+    VOICE = "es-MX-JorgeNeural"
 
     def __init__(self):
-        self.client = None
         self.engine = None
 
     # =========================
-    # ELEVENLABS
+    # EDGE TTS
     # =========================
 
-    def _initialize_elevenlabs(self):
-
-        try:
-            api_key = os.getenv("ELEVENLABS_API_KEY")
-
-            if not api_key:
-                logger.warning(
-                    "No se encontró ELEVENLABS_API_KEY."
-                )
-                return False
-
-            self.client = ElevenLabs(api_key=api_key)
-
-            return True
-
-        except Exception as error:
-            logger.error(
-                f"No se pudo inicializar ElevenLabs: {error}"
-            )
-
-            self.client = None
-
-            return False
-
-    def _speak_elevenlabs(self, text):
-
-        if not self._initialize_elevenlabs():
-            return False
-
+    def _speak_edge(self, text):
         temp_path = None
 
         try:
-
-            audio = self.client.text_to_speech.convert(
-                text=text,
-                voice_id=self.VOICE_ID,
-                model_id=self.MODEL_ID,
-                output_format="mp3_44100_128",
-            )
-
-            audio_data = b"".join(audio)
-
             with tempfile.NamedTemporaryFile(
                 suffix=".mp3",
                 delete=False
             ) as temp_file:
-
-                temp_file.write(audio_data)
                 temp_path = temp_file.name
+
+            async def generate():
+                communicate = edge_tts.Communicate(
+                    text,
+                    self.VOICE
+                )
+
+                await communicate.save(temp_path)
+
+            asyncio.run(generate())
 
             pygame.mixer.init()
             pygame.mixer.music.load(temp_path)
@@ -87,15 +51,12 @@ class TextToSpeech:
             return True
 
         except Exception as error:
-
             logger.warning(
-                f"ElevenLabs no disponible: {error}"
+                f"Edge TTS no disponible: {error}"
             )
-
             return False
 
         finally:
-
             try:
                 pygame.mixer.music.stop()
                 pygame.mixer.quit()
@@ -103,22 +64,32 @@ class TextToSpeech:
                 pass
 
             if temp_path and os.path.exists(temp_path):
-
                 try:
                     os.remove(temp_path)
                 except OSError:
                     pass
 
-            self.client = None
-
     # =========================
-    # PYTTSX3 FALLBACK
+    # PYTTSX3 / SABINA
     # =========================
 
-    def _initialize_local_tts(self):
-
+    def _find_voice(self, name):
         try:
+            voices = self.engine.getProperty("voices")
 
+            for voice in voices:
+                if name.lower() in voice.name.lower():
+                    return voice.id
+
+        except Exception as error:
+            logger.error(
+                f"No se pudieron obtener las voces locales: {error}"
+            )
+
+        return None
+
+    def _speak_local(self, text):
+        try:
             self.engine = pyttsx3.init()
 
             self.engine.setProperty(
@@ -134,56 +105,10 @@ class TextToSpeech:
             voice_id = self._find_voice(TTS_VOICE)
 
             if voice_id:
-
-                logger.info(
-                    f"Usando voz local '{TTS_VOICE}'"
-                )
-
                 self.engine.setProperty(
                     "voice",
                     voice_id
                 )
-
-            return True
-
-        except Exception as error:
-
-            logger.error(
-                f"No se pudo inicializar TTS local: {error}"
-            )
-
-            self.engine = None
-
-            return False
-
-    def _find_voice(self, name):
-
-        try:
-
-            voices = self.engine.getProperty(
-                "voices"
-            )
-
-            for voice in voices:
-
-                if name.lower() in voice.name.lower():
-
-                    return voice.id
-
-        except Exception as error:
-
-            logger.error(
-                f"No se pudieron obtener las voces locales: {error}"
-            )
-
-        return None
-
-    def _speak_local(self, text):
-
-        if not self._initialize_local_tts():
-            return False
-
-        try:
 
             self.engine.say(text)
             self.engine.runAndWait()
@@ -191,15 +116,12 @@ class TextToSpeech:
             return True
 
         except Exception as error:
-
             logger.error(
                 f"Error al reproducir TTS local: {error}"
             )
-
             return False
 
         finally:
-
             self.engine = None
 
     # =========================
@@ -208,11 +130,13 @@ class TextToSpeech:
 
     def speak(self, text):
 
-        if self._speak_elevenlabs(text):
+        # Primero intenta Alonso
+        if self._speak_edge(text):
             return
 
+        # Si Edge TTS falla, usa Sabina
         logger.warning(
-            "Usando TTS local como alternativa."
+            "Usando voz local como alternativa."
         )
 
         self._speak_local(text)
