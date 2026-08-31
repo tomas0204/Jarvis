@@ -60,5 +60,10 @@ def register_commands(registry, system):
         media.unmute
     )
     
+    registry.register(
+        "pause",
+        media.pause
+    )
+    
 
     

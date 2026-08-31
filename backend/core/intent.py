@@ -100,6 +100,11 @@ class Intent:
 
         if result:
             return result
+    
+        result = self._detect_media(words)
+
+        if result:
+            return result
 
         # Abrir sitio web
         result = self._detect_website(words)
@@ -286,6 +291,14 @@ class Intent:
             }
 
         return None
+
+    def _detect_media(self, words):
+        if "pausa" in words or "pausar" in words:
+            return {
+                "type": "command",
+                "name": "pause",
+                "args": {}
+            }
 
     def _normalize(self, text):
         text = text.lower().strip()
