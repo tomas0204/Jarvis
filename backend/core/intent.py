@@ -267,6 +267,23 @@ class Intent:
                 "name": "volume_down",
                 "args": {}
             }
+        
+        if "silencia" in words or "silenciar" in words:
+            return {
+                "type": "command",
+                "name": "mute",
+                "args": {}
+            }
+        
+        if (
+            "quita" in words
+            and "silencio" in words
+        ):
+            return {
+                "type": "command",
+                "name": "unmute",
+                "args": {}
+            }
 
         return None
 

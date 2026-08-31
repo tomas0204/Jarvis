@@ -49,4 +49,16 @@ def register_commands(registry, system):
         "set_volume",
         media.set_volume
     )
+
+    registry.register(
+        "mute",
+        media.mute
+    )
+    
+    registry.register(
+        "unmute",
+        media.unmute
+    )
+    
+
     

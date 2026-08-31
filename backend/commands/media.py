@@ -53,3 +53,19 @@ class MediaCommands:
             True,
             f"Volumen al {percentage}%."
         )
+        
+    def mute(self):
+        self.volume.SetMute(1, None)
+        
+        return CommandResult(
+            True,
+            "Se silenció el volumen."
+        )
+    
+    def unmute(self):
+        self.volume.SetMute(0, None)
+        
+        return CommandResult(
+            True,
+            "Volumen activado."
+        )
