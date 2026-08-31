@@ -65,5 +65,9 @@ def register_commands(registry, system):
         media.pause
     )
     
+    registry.register(
+        "resume",
+        media.resume
+    )
 
     

@@ -90,3 +90,22 @@ class MediaCommands:
             True,
             "Reproducción pausada."
         )
+    
+    def resume(self):
+        win32api.keybd_event(
+            win32con.VK_MEDIA_PLAY_PAUSE,
+            0,
+            0,
+            0
+        )
+        win32api.keybd_event(
+            win32con.VK_MEDIA_PLAY_PAUSE,
+            0,
+            win32con.KEYEVENTF_KEYUP,
+            0
+        )
+
+        return CommandResult(
+            True,
+            "Reproducción reanudada."
+        )

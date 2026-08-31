@@ -299,6 +299,13 @@ class Intent:
                 "name": "pause",
                 "args": {}
             }
+        
+        if "reanuda" in words or "reanudar" in words:
+            return {
+                "type": "command",
+                "name": "resume",
+                "args": {}
+            }
 
     def _normalize(self, text):
         text = text.lower().strip()
