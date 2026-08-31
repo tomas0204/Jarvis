@@ -40,3 +40,16 @@ class MediaCommands:
             True,
             f"Volumen al {percentage}%."
         )
+    
+    def set_volume(self, percentage):
+        percentage = max(0, min(100, percentage))
+
+        self.volume.SetMasterVolumeLevelScalar(
+            percentage / 100,
+            None
+        )
+
+        return CommandResult(
+            True,
+            f"Volumen al {percentage}%."
+        )

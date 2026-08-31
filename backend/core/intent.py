@@ -1,4 +1,5 @@
 from config import WEBSITES, APPLICATIONS
+import re
 
 OPEN_WORDS = [
     "abre",
@@ -33,6 +34,27 @@ VOLUME_DOWN_WORDS = [
     "reducir"
 ]
 
+VOLUME_UP_WORDS = [
+    "sube el volumen",
+    "subir el volumen",
+    "sube volumen",
+    "subir volumen",
+    "aumenta el volumen",
+    "aumentar el volumen",
+    "más volumen",
+    "mas volumen",
+]
+
+VOLUME_DOWN_WORDS = [
+    "baja el volumen",
+    "bajar el volumen",
+    "baja volumen",
+    "bajar volumen",
+    "disminuye el volumen",
+    "disminuir el volumen",
+    "menos volumen",
+]
+
 class Intent:
     
     WAKE_WORDS = [
@@ -65,6 +87,7 @@ class Intent:
                 "name": None,
                 "args": {}
             }
+
 
         # Buscar en web
         result = self._detect_search(text)
@@ -196,21 +219,54 @@ class Intent:
         return None
 
     def _detect_volume(self, words):
-        if any(word in words for word in VOLUME_UP_WORDS):
-            if "volumen" in words:
-                return {
-                    "type": "command",
-                    "name": "volume_up",
-                    "args": {}
-                }
 
-        if any(word in words for word in VOLUME_DOWN_WORDS):
-            if "volumen" in words:
-                return {
-                    "type": "command",
-                    "name": "volume_down",
-                    "args": {}
+        if "volumen" not in words:
+            return None
+
+        text = " ".join(words)
+
+        # Volumen por porcentaje
+        match = re.search(
+            r"(?:volumen|volumen al|volumen en).*?(\d{1,3})\s*%?",
+            text
+        )
+
+        if match:
+            percentage = int(match.group(1))
+
+            return {
+                "type": "command",
+                "name": "set_volume",
+                "args": {
+                    "percentage": percentage
                 }
+            }
+
+        # Subir volumen
+        if (
+            "sube" in words
+            or "subir" in words
+            or "aumenta" in words
+            or "aumentar" in words
+        ):
+            return {
+                "type": "command",
+                "name": "volume_up",
+                "args": {}
+            }
+
+        # Bajar volumen
+        if (
+            "baja" in words
+            or "bajar" in words
+            or "disminuye" in words
+            or "disminuir" in words
+        ):
+            return {
+                "type": "command",
+                "name": "volume_down",
+                "args": {}
+            }
 
         return None
 

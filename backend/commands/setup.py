@@ -45,3 +45,8 @@ def register_commands(registry, system):
         media.volume_down
     )
     
+    registry.register(
+        "set_volume",
+        media.set_volume
+    )
+    
