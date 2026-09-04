@@ -7,87 +7,97 @@ from groq import Groq
 
 from config import GROQ_API_KEY, VISION_MODEL
 
+class Vision:
+    
+    def __init__(self):
+        self.client = Groq(api_key=GROQ_API_KEY)
+    
+    def capture_screen(self):
+        """
+        Captura la pantalla principal y devuelve la imagen en memoria.
+        No guarda ningún archivo en el disco.
+        """
 
-def capture_screen():
-    """
-    Captura la pantalla principal y devuelve la imagen en memoria.
-    No guarda ningún archivo en el disco.
-    """
+        screenshot = ImageGrab.grab()
 
-    screenshot = ImageGrab.grab()
+        buffer = io.BytesIO()
+        screenshot.save(
+            buffer,
+            format="JPEG",
+            quality=85
+        )
 
-    buffer = io.BytesIO()
-    screenshot.save(
-        buffer,
-        format="JPEG",
-        quality=85
-    )
-
-    return buffer.getvalue()
-
-
-def image_to_base64(image_bytes):
-    """
-    Convierte los bytes de la imagen a Base64.
-    """
-
-    return base64.b64encode(image_bytes).decode("utf-8")
+        return buffer.getvalue()
 
 
-def clean_response(response):
-    """
-    Elimina el bloque de razonamiento <think>...</think>
-    de la respuesta del modelo.
-    """
+    def image_to_base64(self, image_bytes):
+        """
+        Convierte los bytes de la imagen a Base64.
+        """
 
-    if not response:
-        return None
-
-    response = re.sub(
-        r"<think>.*?</think>",
-        "",
-        response,
-        flags=re.DOTALL
-    )
-
-    return response.strip()
+        return base64.b64encode(image_bytes).decode("utf-8")
 
 
-def analyze_screen(image_bytes):
-    """
-    Envía una captura de pantalla a Groq Vision
-    y devuelve su análisis.
-    """
+    def clean_response(self, response):
+        """
+        Elimina el bloque de razonamiento <think>...</think>
+        de la respuesta del modelo.
+        """
 
-    client = Groq(api_key=GROQ_API_KEY)
+        if not response:
+            return None
 
-    image_base64 = image_to_base64(image_bytes)
+        response = re.sub(
+            r"<think>.*?</think>",
+            "",
+            response,
+            flags=re.DOTALL
+        )
 
-    response = client.chat.completions.create(
-        model=VISION_MODEL,
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": (
-                            "Describe la imagen que aparece en pantalla."
-                        ),
-                    },
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:image/jpeg;base64,{image_base64}"
+        return response.strip()
+
+
+    def analyze_screen(self, image_bytes=None):
+        """
+        Envía una captura de pantalla a Groq Vision
+        y devuelve su análisis.
+        """
+
+        if image_bytes is None:
+            image_bytes = self.capture_screen()
+        
+        client = Groq(api_key=GROQ_API_KEY)
+
+        image_bytes = self.capture_screen()
+        image_base64 = self.image_to_base64(image_bytes)
+
+        response = client.chat.completions.create(
+            model=VISION_MODEL,
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": (
+                                "Analiza la pantalla y responde únicamente con una descripción "
+                                "breve y clara de lo que está viendo el usuario. "
+                                "No muestres razonamiento ni etiquetas <think>."
+                            ),
                         },
-                    },
-                ],
-            }
-        ],
-        temperature=0.7,
-        max_completion_tokens=500,
-    )
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": f"data:image/jpeg;base64,{image_base64}"
+                            },
+                        },
+                    ],
+                }
+            ],
+            temperature=0.7,
+            max_completion_tokens=500,
+        )   
 
-    result = response.choices[0].message.content
-
-    return clean_response(result)
+        return self.clean_response(
+                response.choices[0].message.content
+            )
