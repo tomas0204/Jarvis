@@ -81,13 +81,18 @@ class Intent:
         text = self._normalize(text)
         words = text.split()
         print(f"TEXTO RECIBIDO: {text}")
-        if text in ["salir", "terminar", "adiós", "adios", "chau", "chao", "desactivate", "desactivar", "apagate", "apagar"]:
+        if text in ["salir", "terminar", "adiós", "adios", "chau", "chao", "desactivate", "desactívate", "desactivar", "apagate", "apágate", "apagar"]:
             return {
                 "type": "exit",
                 "name": None,
                 "args": {}
             }
 
+        # Visión
+        result = self._detect_vision(text)
+
+        if result:
+            return result
 
         # Buscar en web
         result = self._detect_search(text)
@@ -307,6 +312,22 @@ class Intent:
                 "args": {}
             }
 
+    def _detect_vision(self, text):
+
+        if (
+            "qué estoy mirando" in text
+            or "que estoy mirando" in text
+            or "qué hay en pantalla" in text
+            or "que hay en pantalla" in text
+        ):
+            return {
+                "type": "command",
+                "name": "analyze_screen",
+                "args": {}
+            }
+        
+        return None
+
     def _normalize(self, text):
         text = text.lower().strip()
 
@@ -324,3 +345,4 @@ class Intent:
             text = text.replace(char, "")
 
         return " ".join(text.split())
+    

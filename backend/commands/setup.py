@@ -2,12 +2,14 @@ from  backend.commands.applications import ApplicationCommands
 from  backend.commands.system_info  import SystemInfoCommands
 from  backend.commands.web          import WebCommands
 from  backend.commands.media        import MediaCommands
+from backend.ai.vision              import Vision
 
 def register_commands(registry, system):
     applications = ApplicationCommands(system)
     system_info = SystemInfoCommands()
     media = MediaCommands()
-    
+    vision = Vision()
+
     registry.register(
         "open_application",
         applications.open
@@ -68,6 +70,11 @@ def register_commands(registry, system):
     registry.register(
         "resume",
         media.resume
+    )
+    
+    registry.register(
+        "analyze_screen",
+        vision.analyze_screen
     )
 
     
