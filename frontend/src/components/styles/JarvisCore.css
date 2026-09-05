@@ -1,0 +1,1527 @@
+/* =========================================================
+   JARVIS CORE
+   ========================================================= */
+
+.core-panel {
+  --core-color: #00d9ff;
+  --core-rgb: 0, 217, 255;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(var(--core-rgb), 0.08) 0%,
+      rgba(3, 9, 15, 0) 50%
+    ),
+    rgba(3, 9, 15, 0.94);
+
+  overflow: hidden;
+}
+
+/* =========================================================
+   CORE CONTAINER
+   ========================================================= */
+
+.jarvis-core {
+  position: relative;
+
+  width: 430px;
+  height: 430px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /*
+   * Variables de estado.
+   *
+   * IMPORTANTE:
+   * No cambiamos animation-name al cambiar de estado.
+   * Solo modificamos variables.
+   */
+  --state-speed: 1;
+  --state-pulse: 1;
+  --state-opacity: 1;
+}
+
+
+/* =========================================================
+   AMBIENT AURA
+   ========================================================= */
+
+.jarvis-core::before {
+  content: "";
+
+  position: absolute;
+  inset: 70px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0, 217, 255, 0.16) 0%,
+      rgba(0, 217, 255, 0.06) 35%,
+      transparent 70%
+    );
+
+  filter: blur(8px);
+
+  opacity: 0.7;
+
+  animation: core-aura 3s ease-in-out infinite;
+
+  pointer-events: none;
+
+  /*
+   * Las propiedades estáticas pueden transicionar.
+   * La animación NO se reinicia al cambiar de estado.
+   */
+  transition:
+    opacity 300ms ease,
+    filter 300ms ease;
+}
+
+
+.jarvis-core::after {
+  content: "";
+
+  position: absolute;
+  inset: 25px;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(0, 217, 255, 0.06);
+
+  box-shadow:
+    0 0 35px rgba(0, 217, 255, 0.05),
+    inset 0 0 35px rgba(0, 217, 255, 0.05);
+
+  animation: aura-rotate 18s linear infinite;
+
+  pointer-events: none;
+
+  transition:
+    border-color 400ms ease,
+    box-shadow 400ms ease;
+}
+
+
+/* =========================================================
+   RADIAL MARKERS
+   ========================================================= */
+
+.core-radial {
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+}
+
+
+.core-radial span {
+  position: absolute;
+  width: 2px;
+  height: 14px;
+  left: 50%;
+  top: 50%;
+
+  background: var(--core-color);
+
+  box-shadow:
+    0 0 8px rgba(var(--core-rgb), 0.4);
+
+  transform-origin: center 180px;
+
+  animation:
+    radial-blink 2.5s ease-in-out infinite;
+
+  pointer-events: none;
+
+  transition:
+    opacity 250ms ease,
+    box-shadow 250ms ease,
+    background 350ms ease;
+}
+
+
+/*
+   Cada marker gira alrededor del centro.
+   8 posiciones.
+*/
+
+.core-radial span:nth-child(1) {
+  transform: translate(-50%, -180px);
+}
+
+.core-radial span:nth-child(2) {
+  transform: translate(-50%, -180px) rotate(45deg);
+}
+
+.core-radial span:nth-child(3) {
+  transform: translate(-50%, -180px) rotate(90deg);
+}
+
+.core-radial span:nth-child(4) {
+  transform: translate(-50%, -180px) rotate(135deg);
+}
+
+.core-radial span:nth-child(5) {
+  transform: translate(-50%, -180px) rotate(180deg);
+}
+
+.core-radial span:nth-child(6) {
+  transform: translate(-50%, -180px) rotate(225deg);
+}
+
+.core-radial span:nth-child(7) {
+  transform: translate(-50%, -180px) rotate(270deg);
+}
+
+.core-radial span:nth-child(8) {
+  transform: translate(-50%, -180px) rotate(315deg);
+}
+
+
+/* =========================================================
+   ORBITS
+   ========================================================= */
+
+.core-orbit {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+
+  animation:
+    orbit-rotate 12s linear infinite;
+
+  transition:
+    filter 350ms ease;
+}
+
+.core-orbit:nth-of-type(4) {
+  transform: scale(0.82);
+
+  animation:
+    orbit-rotate-reverse 8s linear infinite;
+}
+
+
+/* =========================================================
+   ORBIT ELEMENTS
+   ========================================================= */
+
+.core-orbit span {
+  position: absolute;
+
+  display: block;
+
+  background: #00d9ff;
+
+  box-shadow:
+    0 0 6px rgba(0, 217, 255, 0.8),
+    0 0 14px rgba(0, 217, 255, 0.4);
+
+  transition:
+    opacity 350ms ease,
+    filter 350ms ease,
+    box-shadow 350ms ease;
+}
+
+
+/* =========================================================
+   ORBIT POINT
+   ========================================================= */
+
+.orbit-point {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  animation:
+    orbit-point-pulse 2s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   ORBIT SEGMENT
+   ========================================================= */
+
+.orbit-segment {
+  width: 18px;
+  height: 2px;
+
+  border-radius: 2px;
+
+  /*
+   * Animación permanente.
+   */
+  animation:
+    segment-pulse 0.6s ease-in-out infinite alternate;
+}
+
+
+/* =========================================================
+   ORBIT POSITIONS
+   ========================================================= */
+
+.core-orbit span:nth-child(1) {
+  top: 8px;
+  left: 50%;
+
+  transform: translateX(-50%);
+}
+
+
+.core-orbit span:nth-child(2) {
+  top: 15%;
+  right: 19%;
+
+  transform: rotate(45deg);
+}
+
+
+.core-orbit span:nth-child(3) {
+  top: 50%;
+  right: 8px;
+
+  transform: translateY(-50%);
+}
+
+
+.core-orbit span:nth-child(4) {
+  bottom: 15%;
+  right: 19%;
+
+  transform: rotate(135deg);
+}
+
+
+.core-orbit span:nth-child(5) {
+  bottom: 8px;
+  left: 50%;
+
+  transform: translateX(-50%);
+}
+
+
+.core-orbit span:nth-child(6) {
+  bottom: 15%;
+  left: 19%;
+
+  transform: rotate(45deg);
+}
+
+
+.core-orbit span:nth-child(7) {
+  top: 50%;
+  left: 8px;
+
+  transform: translateY(-50%);
+}
+
+
+.core-orbit span:nth-child(8) {
+  top: 15%;
+  left: 19%;
+
+  transform: rotate(135deg);
+}
+
+
+.core-orbit span:nth-child(9) {
+  top: 23%;
+  left: 27%;
+
+  transform: rotate(25deg);
+}
+
+
+.core-orbit span:nth-child(10) {
+  top: 27%;
+  right: 27%;
+
+  transform: rotate(45deg);
+}
+
+
+.core-orbit span:nth-child(11) {
+  bottom: 27%;
+  right: 27%;
+  transform: rotate(115deg);
+}
+
+
+.core-orbit span:nth-child(12) {
+  bottom: 27%;
+  left: 27%;
+
+  transform: rotate(45deg);
+}
+
+
+/* =========================================================
+   CORE RINGS
+   ========================================================= */
+
+.core-ring {
+  position: absolute;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  transition:
+    opacity 400ms ease,
+    box-shadow 400ms ease,
+    border-color 400ms ease,
+    background 400ms ease;
+}
+
+
+/* =========================================================
+   OUTER RING
+   ========================================================= */
+
+.core-ring-outer {
+  width: 340px;
+  height: 340px;
+
+  border: 1px solid rgba(var(--core-rgb), 0.18);
+
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(var(--core-rgb), 0.8) 8deg,
+      transparent 18deg,
+      transparent 55deg,
+      rgba(var(--core-rgb), 0.35) 65deg,
+      transparent 78deg,
+      transparent 145deg,
+      rgba(var(--core-rgb), 0.6) 155deg,
+      transparent 170deg,
+      transparent 240deg,
+      rgba(var(--core-rgb), 0.4) 250deg,
+      transparent 265deg,
+      transparent 330deg,
+      rgba(var(--core-rgb), 0.7) 340deg,
+      transparent 350deg
+    );
+
+  -webkit-mask:
+    radial-gradient(
+      transparent 0,
+      transparent 97%,
+      #000 98%
+    );
+
+  mask:
+    radial-gradient(
+      transparent 0,
+      transparent 97%,
+      #000 98%
+    );
+
+  opacity: 0.8;
+
+  animation:
+    rotate-clockwise 20s linear infinite;
+}
+
+/* =========================================================
+   MIDDLE RING
+   ========================================================= */
+
+.core-ring-middle {
+  width: 270px;
+  height: 270px;
+
+  border: 1px solid rgba(var(--core-rgb), 0.28);
+
+  box-shadow:
+    0 0 15px rgba(var(--core-rgb), 0.04),
+    inset 0 0 15px rgba(var(--core-rgb), 0.03);
+
+  animation:
+    rotate-counter-clockwise 12s linear infinite;
+}
+
+
+.core-ring-middle::before,
+.core-ring-middle::after {
+  content: "";
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  border: 1px solid transparent;
+
+  transition:
+    border-color 400ms ease;
+}
+
+
+.core-ring-middle::before {
+  inset: -8px;
+  border-top-color: rgba(var(--core-rgb), 0.65);
+  border-bottom-color: rgba(var(--core-rgb), 0.2);
+}
+
+.core-ring-middle::after {
+  inset: 8px;
+  border-left-color: rgba(var(--core-rgb), 0.4);
+  border-right-color: rgba(var(--core-rgb), 0.15);
+}
+
+
+/* =========================================================
+   INNER RING
+   ========================================================= */
+
+.core-ring-inner {
+  width: 190px;
+  height: 190px;
+
+  border: 1px solid rgba(var(--core-rgb), 0.5);
+
+  box-shadow:
+    0 0 25px rgba(var(--core-rgb), 0.08),
+    inset 0 0 25px rgba(var(--core-rgb), 0.08);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(var(--core-rgb), 0.05) 0%,
+      transparent 65%
+    );
+
+  animation:
+    core-pulse 3s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   CENTER
+   ========================================================= */
+
+.core-center {
+  position: absolute;
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(var(--core-rgb), 0.16) 0%,
+      rgba(var(--core-rgb), 0.07) 45%,
+      rgba(var(--core-rgb), 0.02) 70%,
+      transparent 100%
+    );
+
+  border: 1px solid rgba(var(--core-rgb), 0.45);
+
+  box-shadow:
+    0 0 30px rgba(var(--core-rgb), 0.15),
+    inset 0 0 20px rgba(var(--core-rgb), 0.08);
+
+  animation:
+    center-pulse 3s ease-in-out infinite;
+
+  z-index: 10;
+
+  transition:
+    background 400ms ease,
+    border-color 400ms ease,
+    box-shadow 400ms ease;
+}
+
+
+/* =========================================================
+   STATE: IDLE
+   ========================================================= */
+
+.state-idle {
+  --core-color: #00d9ff;
+  --core-rgb: 0, 217, 255;
+}
+
+.state-listening {
+  --core-color: #00ffc8;
+  --core-rgb: 0, 255, 200;
+}
+
+.state-processing {
+  --core-color: #a970ff;
+  --core-rgb: 169, 112, 255;
+}
+
+.state-speaking {
+  --core-color: #00aaff;
+  --core-rgb: 0, 170, 255;
+}
+
+/*
+ * En vez de reemplazar animation-name,
+ * solamente modificamos la velocidad.
+ */
+
+.state-idle .core-ring-outer {
+  animation-duration: 20s;
+}
+
+.state-idle .core-ring-middle {
+  animation-duration: 12s;
+}
+
+.state-idle .core-ring-inner {
+  animation-duration: 3s;
+}
+
+.state-idle .core-orbit {
+  animation-duration: 14s;
+}
+
+.state-idle .core-orbit:nth-of-type(4) {
+  animation-duration: 10s;
+}
+
+.state-idle .orbit-segment {
+  opacity: 0.35;
+}
+
+
+/* =========================================================
+   STATE: LISTENING
+   ========================================================= */
+
+.state-listening {
+  --state-speed: 0.5;
+  --state-pulse: 1.12;
+}
+
+
+.state-listening .jarvis-core::before {
+  opacity: 0.85;
+}
+
+.state-listening .core-ring-outer {
+  animation-duration: 8s;
+
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      transparent 250deg,
+      rgba(var(--core-rgb), 0.05) 275deg,
+      rgba(var(--core-rgb), 0.9) 290deg,
+      rgba(var(--core-rgb), 0.25) 305deg,
+      transparent 325deg,
+      transparent 360deg
+    );
+
+  box-shadow:
+    0 0 20px rgba(var(--core-rgb), 0.08);
+}
+
+
+.state-listening .core-ring-middle {
+  animation-duration: 5s;
+}
+
+
+.state-listening .core-ring-inner {
+  animation-duration: 1s;
+}
+
+
+.state-listening .core-center {
+  animation-duration: 1s;
+}
+
+
+.state-listening .core-orbit {
+  animation-duration: 7s;
+}
+
+
+.state-listening .core-orbit:nth-of-type(4) {
+  animation-duration: 5s;
+}
+
+
+.state-listening .orbit-segment {
+  opacity: 0.7;
+}
+
+
+.state-listening .core-radial span {
+  animation:
+    listening-radial 1.2s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   STATE: PROCESSING
+   ========================================================= */
+
+.state-processing {
+  --state-speed: 0.25;
+  --state-pulse: 1.15;
+}
+
+
+.state-processing .core-ring-middle::before {
+  border-top-color: rgba(var(--core-rgb), 0.95);
+  border-bottom-color: rgba(var(--core-rgb), 0.4);
+}
+
+.state-processing .core-ring-middle::after {
+  border-left-color: rgba(var(--core-rgb), 0.7);
+  border-right-color: rgba(var(--core-rgb), 0.3);
+}
+
+
+.state-processing .core-ring-outer {
+  animation-duration: 3s;
+
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(var(--core-rgb), 0.7) 8deg,
+      transparent 18deg,
+
+      transparent 35deg,
+      rgba(var(--core-rgb), 0.35) 42deg,
+      transparent 52deg,
+
+      transparent 80deg,
+      rgba(var(--core-rgb), 0.8) 90deg,
+      transparent 105deg,
+
+      transparent 145deg,
+      rgba(var(--core-rgb), 0.6) 155deg,
+      transparent 168deg,
+
+      transparent 200deg,
+      rgba(var(--core-rgb), 0.8) 212deg,
+      transparent 225deg,
+
+      transparent 260deg,
+      rgba(var(--core-rgb), 0.45) 270deg,
+      transparent 282deg,
+
+      transparent 320deg,
+      rgba(var(--core-rgb), 0.8) 330deg,
+      transparent 345deg
+    );
+
+  box-shadow:
+    0 0 20px rgba(var(--core-rgb), 0.08);
+}
+
+
+.state-processing .core-ring-middle {
+  animation-duration: 2s;
+
+  box-shadow:
+    0 0 20px rgba(0, 217, 255, 0.1),
+    inset 0 0 25px rgba(0, 217, 255, 0.08);
+}
+
+
+.state-processing .core-ring-middle::before {
+  border-top-color: rgba(0, 217, 255, 0.95);
+  border-bottom-color: rgba(0, 217, 255, 0.4);
+}
+
+
+.state-processing .core-ring-middle::after {
+  border-left-color: rgba(0, 217, 255, 0.7);
+  border-right-color: rgba(0, 217, 255, 0.3);
+}
+
+
+.state-processing .core-ring-inner {
+  animation-duration: 0.8s;
+}
+
+
+.state-processing .core-orbit {
+  animation-duration: 3s;
+
+  filter:
+    drop-shadow(0 0 5px rgba(0, 217, 255, 0.35));
+}
+
+
+.state-processing .core-orbit:nth-of-type(4) {
+  animation-duration: 2s;
+
+  filter:
+    drop-shadow(0 0 8px rgba(0, 217, 255, 0.45));
+}
+
+
+.state-processing .orbit-segment {
+  opacity: 1;
+}
+
+
+.state-processing .orbit-point {
+  animation:
+    processing-point 0.6s ease-in-out infinite alternate;
+}
+
+
+.state-processing .orbit-segment {
+  animation:
+    processing-segment 0.45s ease-in-out infinite alternate;
+}
+
+
+.state-processing .core-radial span {
+  animation:
+    processing-radial 0.8s ease-in-out infinite alternate;
+}
+
+
+.state-processing .core-center {
+  background:
+    radial-gradient(
+      circle,
+      rgba(var(--core-rgb), 0.22) 0%,
+      rgba(var(--core-rgb), 0.09) 40%,
+      rgba(var(--core-rgb), 0.02) 70%,
+      transparent 100%
+    );
+
+  border-color: rgba(var(--core-rgb), 0.65);
+
+  box-shadow:
+    0 0 35px rgba(var(--core-rgb), 0.2),
+    0 0 70px rgba(var(--core-rgb), 0.08),
+    inset 0 0 25px rgba(var(--core-rgb), 0.12);
+
+  animation-duration: 0.8s;
+}
+
+
+/* =========================================================
+   STATE: SPEAKING
+   ========================================================= */
+
+.state-speaking {
+  --state-speed: 0.4;
+  --state-pulse: 1.12;
+}
+
+
+.state-speaking .jarvis-core::before {
+  opacity: 0.9;
+}
+
+
+.state-speaking .core-ring-middle::before {
+  border-top-color: rgba(var(--core-rgb), 0.8);
+  border-bottom-color: rgba(var(--core-rgb), 0.25);
+}
+
+.state-speaking .core-ring-middle::after {
+  border-left-color: rgba(var(--core-rgb), 0.55);
+  border-right-color: rgba(var(--core-rgb), 0.2);
+}
+
+
+.state-speaking .core-ring-outer {
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(var(--core-rgb), 0.5) 15deg,
+      transparent 30deg,
+
+      transparent 70deg,
+      rgba(var(--core-rgb), 0.75) 85deg,
+      transparent 105deg,
+
+      transparent 145deg,
+      rgba(var(--core-rgb), 0.45) 160deg,
+      transparent 180deg,
+
+      transparent 220deg,
+      rgba(var(--core-rgb), 0.75) 235deg,
+      transparent 255deg,
+
+      transparent 300deg,
+      rgba(var(--core-rgb), 0.55) 315deg,
+      transparent 335deg
+    );
+
+  box-shadow:
+    0 0 25px rgba(var(--core-rgb), 0.1);
+}
+
+
+.state-speaking .core-ring-middle {
+  box-shadow:
+    0 0 20px rgba(0, 217, 255, 0.12),
+    inset 0 0 25px rgba(0, 217, 255, 0.08);
+}
+
+
+.state-speaking .core-ring-middle::before {
+  border-top-color: rgba(0, 217, 255, 0.8);
+  border-bottom-color: rgba(0, 217, 255, 0.25);
+}
+
+
+.state-speaking .core-ring-middle::after {
+  border-left-color: rgba(0, 217, 255, 0.55);
+  border-right-color: rgba(0, 217, 255, 0.2);
+}
+
+
+.state-speaking .core-ring-inner {
+  animation-duration: 0.5s;
+}
+
+
+.state-speaking .core-center {
+  background:
+    radial-gradient(
+      circle,
+      rgba(var(--core-rgb), 0.25) 0%,
+      rgba(var(--core-rgb), 0.1) 40%,
+      rgba(var(--core-rgb), 0.03) 70%,
+      transparent 100%
+    );
+
+  border-color: rgba(var(--core-rgb), 0.7);
+}
+
+.state-speaking .core-orbit {
+  animation-duration: 5s;
+
+  filter:
+    drop-shadow(0 0 5px rgba(0, 217, 255, 0.35));
+}
+
+
+.state-speaking .core-orbit:nth-of-type(4) {
+  animation-duration: 3.5s;
+
+  filter:
+    drop-shadow(0 0 8px rgba(0, 217, 255, 0.4));
+}
+
+
+.state-speaking .orbit-segment {
+  opacity: 0.9;
+
+  animation:
+    speaking-segment 0.55s ease-in-out infinite alternate;
+}
+
+
+.state-speaking .orbit-point {
+  animation:
+    speaking-point 0.7s ease-in-out infinite alternate;
+}
+
+
+.state-speaking .core-radial span {
+  animation:
+    speaking-radial 0.7s ease-in-out infinite;
+}
+
+
+.state-speaking .core-radial span:nth-child(2),
+.state-speaking .core-radial span:nth-child(6) {
+  animation-delay: 0.15s;
+}
+
+.state-speaking .core-radial span:nth-child(3),
+.state-speaking .core-radial span:nth-child(7) {
+  animation-delay: 0.3s;
+}
+
+.state-speaking .core-radial span:nth-child(4),
+.state-speaking .core-radial span:nth-child(8) {
+  animation-delay: 0.45s;
+}
+
+
+/* =========================================================
+   KEYFRAMES
+   ========================================================= */
+
+@keyframes rotate-clockwise {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+@keyframes rotate-counter-clockwise {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+
+@keyframes orbit-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+@keyframes orbit-rotate-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+
+@keyframes core-aura {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 0.85;
+  }
+}
+
+
+@keyframes aura-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+@keyframes radial-blink {
+  0%,
+  100% {
+    opacity: 0.25;
+    box-shadow:
+      0 0 4px rgba(var(--core-rgb), 0.2);
+  }
+
+  50% {
+    opacity: 1;
+    box-shadow:
+      0 0 12px rgba(var(--core-rgb), 0.8);
+  }
+}
+
+
+@keyframes core-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+
+@keyframes center-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 30px rgba(0, 217, 255, 0.15),
+      inset 0 0 20px rgba(0, 217, 255, 0.08);
+  }
+
+  50% {
+    box-shadow:
+      0 0 45px rgba(0, 217, 255, 0.25),
+      inset 0 0 30px rgba(0, 217, 255, 0.12);
+  }
+}
+
+
+@keyframes listening-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+
+@keyframes listening-center {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+
+@keyframes processing-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+
+@keyframes speaking-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+
+@keyframes speaking-center {
+  0%,
+  100% {
+    box-shadow:
+      0 0 30px rgba(0, 217, 255, 0.15),
+      inset 0 0 20px rgba(0, 217, 255, 0.08);
+  }
+
+  50% {
+    box-shadow:
+      0 0 60px rgba(0, 217, 255, 0.35),
+      inset 0 0 35px rgba(0, 217, 255, 0.15);
+  }
+}
+
+
+@keyframes orbit-point-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+
+@keyframes segment-pulse {
+  from {
+    opacity: 0.35;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* =========================================================
+   LISTENING ANIMATIONS
+   ========================================================= */
+
+@keyframes listening-radial {
+  0%,
+  100% {
+    opacity: 0.25;
+    height: 10px;
+    box-shadow:
+      0 0 4px rgba(var(--core-rgb), 0.2);
+  }
+
+  50% {
+    opacity: 1;
+    height: 18px;
+    box-shadow:
+      0 0 14px rgba(var(--core-rgb), 0.9);
+  }
+}
+
+
+/* =========================================================
+   PROCESSING ANIMATIONS
+   ========================================================= */
+
+@keyframes processing-point {
+  from {
+    opacity: 0.35;
+    filter: brightness(0.8);
+  }
+
+  to {
+    opacity: 1;
+    filter: brightness(1.8);
+  }
+}
+
+@keyframes processing-segment {
+  from {
+    opacity: 0.3;
+    filter: brightness(0.8);
+  }
+
+  to {
+    opacity: 1;
+    filter: brightness(1.8);
+  }
+}
+
+
+@keyframes processing-radial {
+  from {
+    opacity: 0.25;
+    height: 10px;
+  }
+
+  to {
+    opacity: 1;
+    height: 20px;
+  }
+}
+
+/* =========================================================
+   SPEAKING ANIMATIONS
+   ========================================================= */
+
+@keyframes speaking-radial {
+  0%,
+  100% {
+    opacity: 0.25;
+    height: 10px;
+
+    box-shadow:
+      0 0 4px rgba(0, 217, 255, 0.2);
+  }
+
+  50% {
+    opacity: 1;
+    height: 24px;
+
+    box-shadow:
+      0 0 16px rgba(0, 217, 255, 0.95);
+  }
+}
+
+
+@keyframes speaking-point {
+  from {
+    opacity: 0.35;
+    filter: brightness(0.8);
+  }
+
+  to {
+    opacity: 1;
+    filter: brightness(1.7);
+  }
+}
+
+@keyframes speaking-segment {
+  from {
+    opacity: 0.35;
+    filter: brightness(0.8);
+  }
+
+  to {
+    opacity: 1;
+    filter: brightness(1.7);
+  }
+}
+
+
+/* =========================================================
+   CORE HUD
+   ========================================================= */
+
+.core-hud {
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  z-index: 20;
+}
+
+
+/* =========================================================
+   HUD LABELS
+   ========================================================= */
+
+.hud-label {
+  position: absolute;
+
+  font-family: monospace;
+  font-size: 8px;
+  letter-spacing: 2px;
+
+  color: rgba(0, 217, 255, 0.45);
+
+  white-space: nowrap;
+
+  text-shadow:
+    0 0 8px rgba(0, 217, 255, 0.4);
+
+  transition:
+    color 350ms ease,
+    opacity 350ms ease;
+}
+
+
+.hud-label-top {
+  top: 34px;
+  left: 50%;
+
+  transform: translateX(-50%);
+}
+
+
+.hud-label-bottom {
+  bottom: 34px;
+  left: 50%;
+
+  transform: translateX(-50%);
+}
+
+
+/* =========================================================
+   HUD LINES
+   ========================================================= */
+
+.hud-line {
+  position: absolute;
+
+  width: 35px;
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(0, 217, 255, 0.45)
+    );
+
+  opacity: 0.6;
+
+  transition:
+    opacity 350ms ease;
+}
+
+
+.hud-line-top {
+  top: 51px;
+  left: 50%;
+
+  transform: translateX(-50%);
+}
+
+
+.hud-line-bottom {
+  bottom: 51px;
+  left: 50%;
+
+  transform:
+    translateX(-50%)
+    rotate(180deg);
+}
+
+
+/* =========================================================
+   HUD MARKERS
+   ========================================================= */
+
+.hud-mark {
+  position: absolute;
+
+  width: 6px;
+  height: 6px;
+
+  border: 1px solid rgba(0, 217, 255, 0.55);
+
+  box-shadow:
+    0 0 8px rgba(0, 217, 255, 0.25);
+
+  transition:
+    opacity 350ms ease,
+    box-shadow 350ms ease;
+}
+
+
+/* Top */
+
+.hud-mark-top {
+  top: 74px;
+  left: 50%;
+
+  transform:
+    translateX(-50%)
+    rotate(45deg);
+}
+
+
+/* Right */
+
+.hud-mark-right {
+  top: 50%;
+  right: 74px;
+
+  transform:
+    translateY(-50%)
+    rotate(45deg);
+}
+
+
+/* Bottom */
+
+.hud-mark-bottom {
+  bottom: 74px;
+  left: 50%;
+
+  transform:
+    translateX(-50%)
+    rotate(45deg);
+}
+
+
+/* Left */
+
+.hud-mark-left {
+  top: 50%;
+  left: 74px;
+
+  transform:
+    translateY(-50%)
+    rotate(45deg);
+}
+
+
+/* =========================================================
+   HUD STATE EFFECTS
+   ========================================================= */
+
+.state-listening .hud-label {
+  color: rgba(0, 217, 255, 0.7);
+
+  animation:
+    hud-listening 1s ease-in-out infinite alternate;
+}
+
+
+.state-processing .hud-label {
+  color: rgba(0, 217, 255, 0.85);
+
+  animation:
+    hud-processing 0.6s ease-in-out infinite alternate;
+}
+
+
+.state-speaking .hud-label {
+  color: rgba(0, 217, 255, 0.75);
+
+  animation:
+    hud-speaking 0.7s ease-in-out infinite alternate;
+}
+
+
+/* =========================================================
+   HUD ANIMATIONS
+   ========================================================= */
+
+@keyframes hud-listening {
+  from {
+    opacity: 0.45;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+@keyframes hud-processing {
+  from {
+    opacity: 0.35;
+    letter-spacing: 1px;
+  }
+
+  to {
+    opacity: 1;
+    letter-spacing: 2.5px;
+  }
+}
+
+
+@keyframes hud-speaking {
+  from {
+    opacity: 0.45;
+  }
+
+  to {
+    opacity: 0.9;
+  }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .jarvis-core *,
+  .jarvis-core::before,
+  .jarvis-core::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -1,0 +1,348 @@
+from config import WEBSITES, APPLICATIONS
+import re
+
+OPEN_WORDS = [
+    "abre",
+    "abrir",
+    "abri",
+    "abrí",
+    "ejecuta",
+    "ejecutar",
+    "inicia",
+    "iniciar",
+    "ve",
+    "ir",
+    "entra",
+    "entrar"
+]
+
+VOLUME_UP_WORDS = [
+    "sube",
+    "subir",
+    "aumenta",
+    "aumentar",
+    "incrementa",
+    "incrementar"
+]
+
+VOLUME_DOWN_WORDS = [
+    "baja",
+    "bajar",
+    "disminuye",
+    "disminuir",
+    "reduce",
+    "reducir"
+]
+
+VOLUME_UP_WORDS = [
+    "sube el volumen",
+    "subir el volumen",
+    "sube volumen",
+    "subir volumen",
+    "aumenta el volumen",
+    "aumentar el volumen",
+    "más volumen",
+    "mas volumen",
+]
+
+VOLUME_DOWN_WORDS = [
+    "baja el volumen",
+    "bajar el volumen",
+    "baja volumen",
+    "bajar volumen",
+    "disminuye el volumen",
+    "disminuir el volumen",
+    "menos volumen",
+]
+
+class Intent:
+    
+    WAKE_WORDS = [
+        "hey jarvis",
+        "hola jarvis",
+        "oye jarvis",
+        "ok jarvis",
+        "okay jarvis",
+        "jarvis",
+        "eu jarvis",
+        "che jarvis",
+        "jarvis activate"
+    ]
+
+    def is_wake_word(self, text):
+        text = self._normalize_wake_word(text)
+
+        return any(
+            wake_word in text
+            for wake_word in self.WAKE_WORDS
+        )
+
+    def detect(self, text):
+        text = self._normalize(text)
+        words = text.split()
+        print(f"TEXTO RECIBIDO: {text}")
+        if text in ["salir", "terminar", "adiós", "adios", "chau", "chao", "desactivate", "desactívate", "desactivar", "apagate", "apágate", "apagar"]:
+            return {
+                "type": "exit",
+                "name": None,
+                "args": {}
+            }
+
+        # Visión
+        result = self._detect_vision(text)
+
+        if result:
+            return result
+
+        # Buscar en web
+        result = self._detect_search(text)
+
+        if result:
+            return result
+        
+        # Volumen
+        result = self._detect_volume(words)
+
+        if result:
+            return result
+    
+        result = self._detect_media(words)
+
+        if result:
+            return result
+
+        # Abrir sitio web
+        result = self._detect_website(words)
+
+        if result:
+            return result
+
+        # Abrir aplicaciones
+        result = self._detect_application(words)
+
+        if result:
+            return result
+
+        # Hora
+        if "qué hora" in text or "que hora" in text:
+            return {
+                "type": "command",
+                "name": "get_time",
+                "args": {}
+            }
+
+        # Fecha
+        if (
+            "qué fecha" in text
+            or "que fecha" in text
+            or "qué día" in text
+            or "que día" in text
+            or "dia" in text
+        ):
+            return {
+                "type": "command",
+                "name": "get_date",
+                "args": {}
+            }
+
+        return {
+            "type": "conversation",
+            "name": None,
+            "args": {}
+        }
+
+    def _detect_search(self, text):
+        if not text.startswith("busca "):
+            return None
+
+        query = text[6:].strip()
+
+        if not query:
+            return None
+
+        for website in WEBSITES:
+
+            phrase = f"en {website}"
+
+            if phrase in query:
+                search_query = query.replace(
+                    phrase,
+                    ""
+                ).strip()
+
+                if not search_query:
+                    return None
+
+                return {
+                    "type": "command",
+                    "name": "search_website",
+                    "args": {
+                        "name": website,
+                        "query": search_query
+                    }
+                }
+
+        return {
+            "type": "command",
+            "name": "search_website",
+            "args": {
+                "name": "google",
+                "query": query
+            }
+        }
+
+    def _detect_website(self, words):
+        if not any(word in words for word in OPEN_WORDS):
+            return None
+
+        for website, url in WEBSITES.items():
+
+            if website in words:
+                return {
+                    "type": "command",
+                    "name": "open_website",
+                    "args": {
+                        "name": website,
+                        "url": url
+                    }
+                }
+
+        return None
+
+    def _detect_application(self, words):
+        if not any(word in words for word in OPEN_WORDS):
+            return None
+        
+        text = " ".join(words)
+
+        for application, data in APPLICATIONS.items():
+            for alias in data.get("aliases", []):
+                if alias in text:
+                    return {
+                        "type": "command",
+                        "name": "open_application",
+                        "args": {
+                            "name": application
+                        }
+                    }
+
+        return None
+
+    def _detect_volume(self, words):
+
+        if "volumen" not in words:
+            return None
+
+        text = " ".join(words)
+
+        # Volumen por porcentaje
+        match = re.search(
+            r"(?:volumen|volumen al|volumen en).*?(\d{1,3})\s*%?",
+            text
+        )
+
+        if match:
+            percentage = int(match.group(1))
+
+            return {
+                "type": "command",
+                "name": "set_volume",
+                "args": {
+                    "percentage": percentage
+                }
+            }
+
+        # Subir volumen
+        if (
+            "sube" in words
+            or "subir" in words
+            or "aumenta" in words
+            or "aumentar" in words
+        ):
+            return {
+                "type": "command",
+                "name": "volume_up",
+                "args": {}
+            }
+
+        # Bajar volumen
+        if (
+            "baja" in words
+            or "bajar" in words
+            or "disminuye" in words
+            or "disminuir" in words
+        ):
+            return {
+                "type": "command",
+                "name": "volume_down",
+                "args": {}
+            }
+        
+        if "silencia" in words or "silenciar" in words:
+            return {
+                "type": "command",
+                "name": "mute",
+                "args": {}
+            }
+        
+        if (
+            "quita" in words
+            and "silencio" in words
+        ):
+            return {
+                "type": "command",
+                "name": "unmute",
+                "args": {}
+            }
+
+        return None
+
+    def _detect_media(self, words):
+        if "pausa" in words or "pausar" in words:
+            return {
+                "type": "command",
+                "name": "pause",
+                "args": {}
+            }
+        
+        if "reanuda" in words or "reanudar" in words:
+            return {
+                "type": "command",
+                "name": "resume",
+                "args": {}
+            }
+
+    def _detect_vision(self, text):
+
+        if (
+            "qué estoy mirando" in text
+            or "que estoy mirando" in text
+            or "qué hay en pantalla" in text
+            or "que hay en pantalla" in text
+        ):
+            return {
+                "type": "command",
+                "name": "analyze_screen",
+                "args": {}
+            }
+        
+        return None
+
+    def _normalize(self, text):
+        text = text.lower().strip()
+
+        words = text.split()
+
+        if words and words[0] == "jarvis":
+            words.pop(0)
+
+        return " ".join(words)
+
+    def _normalize_wake_word(self, text):
+        text = text.lower().strip()
+
+        for char in ",.!?¿¡":
+            text = text.replace(char, "")
+
+        return " ".join(text.split())
+    
